@@ -3,12 +3,16 @@
 (setf *routeslist*
       (compile-routes
        ;; User website
-       (:GET  "/"             'front-home)
-       (:GET  "/dist/.*"      'serve-bootstrap-file)
-       (:GET  "/test/.*"      'serve-test-file)
-       (:GET  "/d3.js"        'serve-d3js)
-       (:GET  "/d3.min.js"    'serve-d3js)
-       (:GET  "/d3.v3.min.js" 'serve-d3js)
+       (:GET  "/"                 'front-home)
+       (:GET  "/dist/.*"          'serve-bootstrap-file)
+       (:GET  "/test/.*"          'serve-test-file)
+       (:GET  "/d3.js"            'serve-d3js)
+       (:GET  "/d3.v3.js"         'serve-d3js)
+       (:GET  "/d3.min.js"        'serve-d3js)
+       (:GET  "/d3.v3.min.js"     'serve-d3js)
+       (:GET  "/codemirror.js"    'serve-codemirror-js)
+       (:GET  "/codemirror.css"   'serve-codemirror-css)
+       (:GET  "/cm-s-elegant.css" 'serve-codemirror-theme-elegant)
 
        (:GET  "/status"    'front-server-status)
 

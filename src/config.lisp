@@ -18,5 +18,14 @@
 (defparameter *d3js*
   (asdf:system-relative-pathname :pgcharts "web/d3js/d3.min.js"))
 
+(defparameter *codemirror-js*
+  (asdf:system-relative-pathname :pgcharts "web/codemirror-compressed.js"))
+
+(defparameter *codemirror-css*
+  (asdf:system-relative-pathname :pgcharts "web/codemirror-4.0/lib/codemirror.css"))
+
+(defparameter *codemirror-theme-elegant*
+  (asdf:system-relative-pathname :pgcharts "web/codemirror-4.0/theme/elegant.css"))
+
 (defparameter *chart-test-root*
   (asdf:system-relative-pathname :pgcharts "web/charts/"))
