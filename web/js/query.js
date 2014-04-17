@@ -57,6 +57,8 @@ $("form").submit(function(event) {
     // alert( "Handler for .submit() called." );
     event.preventDefault();
 
+    $("#raw").tab('show');
+
     h2 = $("<h2 />");
     h2.val("Fetching results...");
     $("#qresult").empty().append(h2);
