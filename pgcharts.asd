@@ -30,7 +30,8 @@
 	      :components
               ((:file "package")
                (:file "config"   :depends-on ("package"))
-               (:file "frontend" :depends-on ("package" "config"))
+               (:file "dburi"    :depends-on ("package"))
+               (:file "frontend" :depends-on ("package" "config" "dburi"))
                (:file "server"   :depends-on ("package" "config" "frontend"))
                (:file "pgcharts" :depends-on ("package"))))))
 

@@ -61,21 +61,36 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Edit SQL query</h1>
           <form>
-          <textarea id="query" name="query" rows="25" cols="80">
+              <div class="form-group">
+               <div class="input-group">
+                <input type="text"
+                       name="dburi"
+                       class="form-control"
+                       placeholder="postgresql://user@host:port/dbname">
+                 <span class="input-group-btn">
+                  <button class="btn btn-primary"
+                          type="button">Run Query</button>
+                 </span>
+               </div>
+              </div>
+            <div class="form-group">
+              <textarea id="query" name="query" rows="25">
 with drb_stats as (
     select min(drb) as min,
            max(drb) as max
       from team_stats
-),
-     histogram as (
+)
    select width_bucket(drb, min, max, 9) as bucket,
           int4range(min(drb), max(drb), '[]') as range,
           count(*) as freq
      from team_stats, drb_stats
  group by bucket
- order by bucket
-          </textarea>
+ order by bucket;
+              </textarea>
+            </div>
+          </div>
           </form>
           <script>
             var myCodeMirror = CodeMirror.fromTextArea(query, {

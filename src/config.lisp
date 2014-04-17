@@ -1,9 +1,9 @@
 (in-package #:pgcharts)
 
-(defvar *config-filename* "~/.pginstall.ini"
+(defvar *config-filename* "~/.pgcharts.ini"
   "Where to store pginstall configuration.")
 
-(defparameter *dburi* "postgresql:///pginstall"
+(defparameter *dburi* "postgresql:///pgcharts"
   "PostgreSQL database connection.")
 
 (defparameter *listen-port* 9042
@@ -11,6 +11,9 @@
 
 (defparameter *document-root*
   (asdf:system-relative-pathname :pgcharts "web/"))
+
+(defparameter *js-root*
+  (asdf:system-relative-pathname :pgcharts "web/js"))
 
 (defparameter *bootstrap-root*
   (asdf:system-relative-pathname :pgcharts "web/bootstrap-3.1.1-dist"))
@@ -27,5 +30,14 @@
 (defparameter *codemirror-theme-elegant*
   (asdf:system-relative-pathname :pgcharts "web/codemirror-4.0/theme/elegant.css"))
 
-(defparameter *chart-test-root*
+(defparameter *charts-root*
   (asdf:system-relative-pathname :pgcharts "web/charts/"))
+
+(defparameter *charts-demo-root*
+  (asdf:system-relative-pathname :pgcharts "web/demo/"))
+
+(defparameter *header-path*
+  (asdf:system-relative-pathname :pgcharts "web/header.html"))
+
+(defparameter *footer-path*
+  (asdf:system-relative-pathname :pgcharts "web/footer.html"))

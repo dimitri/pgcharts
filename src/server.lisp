@@ -3,9 +3,10 @@
 (setf *routeslist*
       (compile-routes
        ;; User website
-       (:GET  "/"                 'front-home)
+       (:GET  "/"                 'front-new-query)
+       (:GET  "/js/.*"            'serve-pgcharts-js-file)
        (:GET  "/dist/.*"          'serve-bootstrap-file)
-       (:GET  "/test/.*"          'serve-test-file)
+       (:GET  "/test/.*"          'serve-demo-data-file)
        (:GET  "/d3.js"            'serve-d3js)
        (:GET  "/d3.v3.js"         'serve-d3js)
        (:GET  "/d3.min.js"        'serve-d3js)
@@ -16,10 +17,17 @@
 
        (:GET  "/status"    'front-server-status)
 
+       (:GET  "/q"               'front-new-query)
+       (:POST "/run"             'front-run-query)
        (:GET  "/q/:id"           'front-display-query)
-       (:GET  "/chart/:kind/:id" 'front-display-graph-for-query)
+       (:GET  "/chart/:kind/:id" 'front-display-graph-given-query-id)
 
-       (:GET  "/demo/:chart"        'front-test)
+       (:POST "/chart/:kind"     'front-display-graph-given-query-text)
+
+       (:POST "/json"            'front-fetch-json-data)
+       (:POST "/csv"             'front-fetch-csv-data)
+
+       (:GET  "/demo/:chart"        'front-demo)
        ))
 
 (defvar *acceptor* nil "The Web Server")
