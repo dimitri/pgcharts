@@ -20,3 +20,13 @@
 .x.axis path {
   display: none;
 }
+
+#svgdataurl {
+    display: none;
+}
+#pngdataurl {
+    display: none;
+}
+hidden {
+    display: none;
+}

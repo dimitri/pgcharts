@@ -12,7 +12,7 @@ function drawTable(data)
     var thead = $("<thead />")
     var tbody = $("<tbody />");
 
-    table.addClass("table table-stripped");
+    table.addClass("table table-stripped table-hover table-condensed");
     table.append(thead);
     table.append(tbody);
 
@@ -49,6 +49,7 @@ function drawRow(tbody, rowData)
 
 $("#raw").click(function(event) {
     $(this).tab('show');
+    $("#png").addClass("hidden");
     $("#qresult").empty();
     drawTable(qdata);
 });
@@ -132,6 +133,7 @@ function pie(JSONdata)
 
 $("#pie").click(function(event) {
     $(this).tab('show');
+    $("#png").removeClass("hidden");
     $("#qresult").empty();
     pie(qdata);
 });
@@ -190,6 +192,7 @@ function donut(JSONdata)
 
 $("#donut").click(function(event) {
     $(this).tab('show');
+    $("#png").removeClass("hidden");
     $("#qresult").empty();
     donut(qdata);
 });
@@ -264,6 +267,51 @@ function bar(JSONdata)
 
 $("#bar").click(function(event) {
     $(this).tab('show');
+    $("#png").removeClass("hidden");
     $("#qresult").empty();
     bar(qdata);
+});
+
+//
+// http://techslides.com/save-svg-as-an-image/
+//
+d3.select("#png").on("click", function(){
+  var html = d3.select("svg")
+        .attr("version", 1.1)
+        .attr("xmlns", "http://www.w3.org/2000/svg")
+        .node().parentNode.innerHTML;
+
+  //console.log(html);
+  var imgsrc = 'data:image/svg+xml;base64,'+ btoa(html);
+  var img = '<img src="'+imgsrc+'">'; 
+  d3.select("#svgdataurl").html(img);
+
+  var canvas = document.querySelector("canvas"),
+      context = canvas.getContext("2d");
+
+  var image = new Image;
+  image.src = imgsrc;
+    image.onload = function() {
+        // Store the current transformation matrix
+        context.save();
+
+        // Use the identity matrix while clearing the canvas
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Restore the transform
+        context.restore();        
+
+	context.drawImage(image, 0, 0);
+
+	var canvasdata = canvas.toDataURL("image/png");
+
+	var pngimg = '<img src="'+canvasdata+'">'; 
+  	d3.select("#pngdataurl").html(pngimg);
+
+	var a = document.createElement("a");
+	a.download = "sample.png";
+	a.href = canvasdata;
+	a.click();
+    };
 });

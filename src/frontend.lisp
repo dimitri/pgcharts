@@ -143,14 +143,29 @@
             });"
                        ))
         (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
-              (:h1 :class "page-header" "Query Results")
+              (:h1 :class "page-header"
+                   "Query Results"
+                   (:small :class "pull-right"
+                           (:a :id "png" :href "#" :class "hidden"
+                               (:span :class "glyphicon glyphicon-download"))))
               (:ul :class "nav nav-tabs"
-                   (:li :class "active" (:a :id "raw" :href "#raw" "Raw Results"))
-                   (:li (:a :id "bar" :href "#bar" "Bar Chart"))
-                   (:li (:a :id "pie" :href "#pie" "Pie Chart"))
-                   (:li (:a :id "donut" :href "#donut" "Donut Chart")))
-              (:div :id "qresult"))
-        ))))
+                   (:li :class "active"
+                        (:a :id "raw" :href "#raw"
+                            (:span :class "glyphicon glyphicon-th"
+                                   " Raw Results")))
+                   (:li (:a :id "bar" :href "#bar"
+                            (:span :class "glyphicon glyphicon-stats")
+                            " Bar Chart"))
+                   (:li (:a :id "pie" :href "#pie"
+                            (:span :class "glyphicon glyphicon-dashboard")
+                            " Pie Chart"))
+                   (:li (:a :id "donut" :href "#donut"
+                            (:span :class "glyphicon glyphicon-record")
+                            " Donut Chart")))
+              (:div :id "qresult")
+              (:div :id "svgdataurl")
+              (:div :id "pngdataurl")
+              (:canvas :width "960" :height "500" :class "hidden"))))))
 
 ;;; REVIEW THAT PARAMETER
 ;;;
