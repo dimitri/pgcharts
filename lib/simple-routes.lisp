@@ -105,7 +105,10 @@
    but otherwise falls back to the hunchentoot defaults *dispatch-table* and easy-acceptor"
   (let ((uri (request-uri request))
 	(request-type (hunchentoot:request-method request)))
-    (let* ((*routeslist*  (routes acceptor))
+    (let* ((*routeslist* (let ((routes (routes acceptor)))
+                           (typecase routes
+                             (symbol (symbol-value routes))
+                             (t      routes))))
            (potentialout (simple-router uri request-type)))
       (or potentialout
 	  (call-next-method)))))

@@ -39,7 +39,7 @@
     (error "The web server is already running."))
 
   (setf *acceptor* (make-instance 'simpleroutes-acceptor
-                                  :routes *routes*
+                                  :routes '*routes*
                                   :port *listen-port*
                                   :document-root *document-root*
                                   :access-log-destination *terminal-io*
