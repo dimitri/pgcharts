@@ -6,8 +6,7 @@
 
 (defpackage :simple-routes
   (:use :common-lisp :cl-ppcre :hunchentoot)
-  (:export :*routeslist*
-	   :compile-routes
+  (:export :compile-routes
 	   :simpleroutes-acceptor
 	   :simpleroutes-ssl-acceptor
 	   :bind-alist-values
@@ -23,10 +22,13 @@
   incoming requests are matched up against each item in *routeslist* successively, until (and if) a
   matching routespec is found.")
 
-(defclass simpleroutes-acceptor (easy-acceptor)
-  ()
-  (:documentation "This first tries to route requests using simple-router, then falls back 
-                    to hunchentoot's default easy-acceptor."))
+(defclass simpleroutes-acceptor (acceptor)
+  ((routes :initarg :routes
+           :accessor routes
+           :documentation "Routes list."))
+  (:documentation
+   "This first tries to route requests using simple-router, then falls back
+    to hunchentoot's default easy-acceptor."))
 
 #-:hunchentoot-no-ssl
 (defclass simpleroutes-ssl-acceptor (simpleroutes-acceptor ssl-acceptor)
@@ -103,16 +105,10 @@
    but otherwise falls back to the hunchentoot defaults *dispatch-table* and easy-acceptor"
   (let ((uri (request-uri request))
 	(request-type (hunchentoot:request-method request)))
-    (let ((potentialout (simple-router uri request-type)))
-      (if potentialout
-	  potentialout
+    (let* ((*routeslist*  (routes acceptor))
+           (potentialout (simple-router uri request-type)))
+      (or potentialout
 	  (call-next-method)))))
-	
-  ;; (loop for dispatcher in *dispatch-table*
-  ;;    for action = (funcall dispatcher request)
-  ;;    when action return (funcall action)
-  ;;    finally (call-next-method)))
-
 
 (defmacro bind-alist-values (lambda-list alist-expression &rest body)
   "this is intended to be used to access get and post parameters.  example usage
@@ -130,7 +126,3 @@
   (let ((lindex (- (length seq) 1)))
     (when (> lindex 0)
       (elt seq lindex))))
-
-(defmacro define-simple-handler (name argument-spec &body body)
-  `(defun ,name ,argument-spec 
-     ,@body))

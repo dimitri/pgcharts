@@ -1,6 +1,6 @@
 (in-package #:pgcharts)
 
-(setf *routeslist*
+(defvar *routes*
       (compile-routes
        ;; User website
        (:GET  "/"                 'front-new-query)
@@ -39,6 +39,7 @@
     (error "The web server is already running."))
 
   (setf *acceptor* (make-instance 'simpleroutes-acceptor
+                                  :routes *routes*
                                   :port *listen-port*
                                   :document-root *document-root*
                                   :access-log-destination *terminal-io*
