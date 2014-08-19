@@ -17,6 +17,12 @@
 
        (:GET  "/status"    'front-server-status)
 
+       (:GET  "/db"      'front-manage-databases)
+       (:POST "/db/add"  'front-add-database)
+       (:POST "/db/desc" 'front-set-database-description)
+
+       (:GET  "/users"  'front-manage-users)
+
        (:GET  "/q"               'front-new-query)
        (:POST "/run"             'front-run-query)
        (:GET  "/q/:id"           'front-display-query)

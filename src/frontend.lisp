@@ -3,9 +3,10 @@
 ;;;
 ;;; General tools to render frontend code
 ;;;
-(defvar *menu* '(("/#q" . "Query")
-                 ("/#r" . "Result")
-                 ("/#c" . "Chart"))
+(defvar *menu* '(("/"      . "Dashboard")
+                 ("/db"    . "Databases")
+                 ("/users" . "Users")
+                 ("/q"     . "Queries"))
   "An alist of HREF and TITLE for the main menu.")
 
 (defun compute-menu (current-url-path)
