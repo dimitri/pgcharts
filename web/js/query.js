@@ -49,7 +49,6 @@ function drawRow(tbody, rowData)
 
 $("#raw").click(function(event) {
     $(this).tab('show');
-    $("#png").addClass("hidden");
     $("#qresult").empty();
     drawTable(qdata);
 });
@@ -126,7 +125,6 @@ function pie(JSONdata)
 
 $("#pie").click(function(event) {
     $(this).tab('show');
-    $("#png").removeClass("hidden");
     $("#qresult").empty();
     pie(qdata);
 });
@@ -185,7 +183,6 @@ function donut(JSONdata)
 
 $("#donut").click(function(event) {
     $(this).tab('show');
-    $("#png").removeClass("hidden");
     $("#qresult").empty();
     donut(qdata);
 });
@@ -243,7 +240,6 @@ function bar(JSONdata)
 
 $("#bar").click(function(event) {
     $(this).tab('show');
-    $("#png").removeClass("hidden");
     $("#qresult").empty();
     bar(qdata);
 });

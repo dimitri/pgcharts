@@ -35,14 +35,20 @@
                                                     "read-sql-files"
                                                     "dburi"))
 
+               ;; frontend
                (:file "frontend"    :depends-on ("package"
                                                  "config"
-                                                 "read-sql-files"
                                                  "dburi"))
-               (:file "frontend-db" :depends-on ("package"
+               (:file "front-db"    :depends-on ("package"
                                                  "config"
                                                  "read-sql-files"
                                                  "dburi"))
+               (:file "front-query" :depends-on ("package"
+                                                 "config"
+                                                 "read-sql-files"
+                                                 "dburi"))
+
+               ;; http server control and main routing
                (:file "server"   :depends-on ("package"
                                               "config"
                                               "frontend"
