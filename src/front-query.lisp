@@ -78,14 +78,14 @@
  group by bucket
  order by bucket")))
                      (:div :class "form-group"
-                           (:div :class "col-sm-offset-3 col-sm-3"
-                                 (:button :id "btn-save-query"
-                                          :class "btn btn-primary"
-                                          :type "submit" "Save Query"))
-                           (:div :class "col-sm-6"
+                           (:div :class "col-sm-offset-3 col-sm-2"
                                  (:button :id "btn-run-query"
                                           :class "btn btn-success"
-                                          :type "button" "Run Query")))))
+                                          :type "button" "Run Query"))
+                           (:div :class "col-sm-offset-5 col-sm-2"
+                                 (:button :id "btn-save-query"
+                                          :class "btn btn-primary"
+                                          :type "submit" "Save Query")))))
         (:script "
             var myCodeMirror = CodeMirror.fromTextArea(query, {
               lineWrapping: true,
