@@ -53,7 +53,7 @@ $("#raw").click(function(event) {
     drawTable(qdata);
 });
 
-$("#run-query").submit(function(event) {
+$("#btn-run-query").click(function(event) {
     // alert( "Handler for .submit() called." );
     event.preventDefault();
 
