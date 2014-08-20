@@ -53,8 +53,11 @@
                         (:a :id "raw" :href "#raw"
                             (:span :class "glyphicon glyphicon-th"
                                    " Raw Results")))
-                   (:li (:a :id "bar" :href "#bar"
+                   (:li (:a :id "col" :href "#col"
                             (:span :class "glyphicon glyphicon-stats")
+                            " Column Chart"))
+                   (:li (:a :id "bar" :href "#bar"
+                            (:span :class "glyphicon glyphicon-align-left")
                             " Bar Chart"))
                    (:li (:a :id "pie" :href "#pie"
                             (:span :class "glyphicon glyphicon-dashboard")
