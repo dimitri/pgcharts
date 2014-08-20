@@ -7,7 +7,6 @@
   "Add a new database connection string."
   (let* ((dburi (hunchentoot:post-parameter "dburi")))
     (when (validate-dburi dburi)
-      (hunchentoot:log-message* :log "plop ~a" dburi)
       (destructuring-bind (name user pass host &key (port 5432))
           (parse-pgsql-connection-string dburi)
         (with-pgsql-connection (*dburi*)
