@@ -28,7 +28,6 @@
        (:GET  "/q"               'front-pick-db)
        (:POST "/q/save"          'front-save-query)
        (:GET  "/q/:db"           'front-new-query)
-       ;; (:POST "/run"             'front-run-query)
        (:GET  "/q/:db/:id"       'front-display-query)
        (:GET  "/chart/:kind/:id" 'front-display-graph-given-query-id)
 
