@@ -83,52 +83,45 @@ $("form").submit(function(event) {
 //
 function pie(JSONdata)
 {
-    var width = 960,
-        height = 500,
-        radius = Math.min(width, height) / 2;
-
-    var color = d3.scale.ordinal()
-        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-    var arc = d3.svg.arc()
-        .outerRadius(radius - 10)
-        .innerRadius(0);
-
-    var pie = d3.layout.pie()
-        .sort(null)
-        .value(function(d) { return d.population; });
-
-    var svg = d3.select("#qresult").append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-    
     var data = [];
 
     for(i=0; i<JSONdata.length; i++)
     {
-        data.push({
-            label: JSONdata[i].RANGE,
-            population: +JSONdata[i].FREQ
-        });
+        data.push([JSONdata[i].RANGE, JSONdata[i].FREQ]);
     }
-    console.log(data);
 
-    var g = svg.selectAll(".arc")
-        .data(pie(data))
-        .enter().append("g")
-        .attr("class", "arc");
-
-    g.append("path")
-        .attr("d", arc)
-        .style("fill", function(d) { return color(d.data.label); });
-
-    g.append("text")
-        .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-        .attr("dy", ".35em")
-        .style("text-anchor", "middle")
-        .text(function(d) { return d.data.label; });
+    $('#qresult').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: 1,//null,
+            plotShadow: false
+        },
+        title: {
+            text: 'Query results'
+        },
+        tooltip: {
+    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                },
+                showInLegend: true
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Query results',
+            data: data
+        }]
+    });
 };
 
 $("#pie").click(function(event) {
@@ -143,52 +136,52 @@ $("#pie").click(function(event) {
 //
 function donut(JSONdata)
 {
-    var width = 960,
-        height = 500,
-        radius = Math.min(width, height) / 2;
-
-    var color = d3.scale.ordinal()
-        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-    var arc = d3.svg.arc()
-        .outerRadius(radius - 10)
-        .innerRadius(radius - 70);
-
-    var pie = d3.layout.pie()
-        .sort(null)
-        .value(function(d) { return d.population; });
-
-    var svg = d3.select("#qresult").append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
     var data = [];
 
     for(i=0; i<JSONdata.length; i++)
     {
-        data.push({
-            label: JSONdata[i].RANGE,
-            population: +JSONdata[i].FREQ
-        });
+        data.push([JSONdata[i].RANGE, JSONdata[i].FREQ]);
     }
 
-    var g = svg.selectAll(".arc")
-        .data(pie(data))
-        .enter().append("g")
-        .attr("class", "arc");
-
-    g.append("path")
-        .attr("d", arc)
-        .style("fill", function(d) { return color(d.data.label); });
-
-    g.append("text")
-        .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-        .attr("dy", ".35em")
-        .style("text-anchor", "middle")
-        .text(function(d) { return d.data.label; });
-};
+    $('#qresult').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: 0,
+            plotShadow: false
+        },
+        title: {
+            text: 'Query<br>result',
+            align: 'center',
+            verticalAlign: 'middle',
+            y: 50
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: true,
+                    distance: -50,
+                    style: {
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textShadow: '0px 1px 2px black'
+                    }
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '75%']
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Range',
+            innerSize: '50%',
+            data: data
+        }]
+    });
+}
 
 $("#donut").click(function(event) {
     $(this).tab('show');
@@ -202,67 +195,50 @@ $("#donut").click(function(event) {
 //
 function bar(JSONdata)
 {
-    var margin = {top: 20, right: 20, bottom: 30, left: 80},
-        width = 960 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
-
-    var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1);
-
-    var y = d3.scale.linear()
-        .range([height, 0]);
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom");
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left")
-        .ticks(10);
-
-    var svg = d3.select("#qresult").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+    var cats = [];
     var data = [];
 
     for(i=0; i<JSONdata.length; i++)
     {
-        data.push({
-            label: JSONdata[i].RANGE,
-            population: +JSONdata[i].FREQ
-        });
+        cats.push(JSONdata[i].RANGE);
+        data.push(JSONdata[i].FREQ);
     }
-
-    x.domain(data.map(function(d) { return d.label; }));
-    y.domain([0, d3.max(data, function(d) { return d.population; })]);
-
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis)
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text("Population");
-
-    svg.selectAll(".bar")
-        .data(data)
-        .enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", function(d) { return x(d.label); })
-        .attr("width", x.rangeBand())
-        .attr("y", function(d) { return y(d.population); })
-        .attr("height", function(d) { return height - y(d.population) });
+    
+    $('#qresult').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Query Result'
+        },
+        xAxis: {
+            categories: cats
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Ranges'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Ranges',
+            data: data
+        }]
+    });
 };
 
 $("#bar").click(function(event) {
@@ -270,48 +246,4 @@ $("#bar").click(function(event) {
     $("#png").removeClass("hidden");
     $("#qresult").empty();
     bar(qdata);
-});
-
-//
-// http://techslides.com/save-svg-as-an-image/
-//
-d3.select("#png").on("click", function(){
-  var html = d3.select("svg")
-        .attr("version", 1.1)
-        .attr("xmlns", "http://www.w3.org/2000/svg")
-        .node().parentNode.innerHTML;
-
-  //console.log(html);
-  var imgsrc = 'data:image/svg+xml;base64,'+ btoa(html);
-  var img = '<img src="'+imgsrc+'">'; 
-  d3.select("#svgdataurl").html(img);
-
-  var canvas = document.querySelector("canvas"),
-      context = canvas.getContext("2d");
-
-  var image = new Image;
-  image.src = imgsrc;
-    image.onload = function() {
-        // Store the current transformation matrix
-        context.save();
-
-        // Use the identity matrix while clearing the canvas
-        context.setTransform(1, 0, 0, 1, 0, 0);
-        context.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Restore the transform
-        context.restore();        
-
-	context.drawImage(image, 0, 0);
-
-	var canvasdata = canvas.toDataURL("image/png");
-
-	var pngimg = '<img src="'+canvasdata+'">'; 
-  	d3.select("#pngdataurl").html(pngimg);
-
-	var a = document.createElement("a");
-	a.download = "sample.png";
-	a.href = canvasdata;
-	a.click();
-    };
 });

@@ -18,6 +18,9 @@
 (defparameter *bootstrap-root*
   (asdf:system-relative-pathname :pgcharts "web/bootstrap-3.1.1-dist"))
 
+(defparameter *highcharts-root*
+  (asdf:system-relative-pathname :pgcharts "web/Highcharts"))
+
 (defparameter *d3js*
   (asdf:system-relative-pathname :pgcharts "web/d3js/d3.min.js"))
 

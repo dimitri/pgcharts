@@ -46,6 +46,14 @@
                           (cddr (split-sequence #\/ (hunchentoot:script-name*))))))
     (hunchentoot:handle-static-file filename)))
 
+(defun serve-highcharts-file ()
+  "Serve whatever /dist/.* has been asked."
+  (let ((filename (format nil "~a/~{~a~^/~}"
+                          *highcharts-root*
+                          ;; skip leading /dist/ from the script name
+                          (cddr (split-sequence #\/ (hunchentoot:script-name*))))))
+    (hunchentoot:handle-static-file filename)))
+
 (defun serve-demo-data-file ()
   "Serve whatever /test/.* has been asked."
   (let ((filename (format nil "~a/~{~a~^/~}"
