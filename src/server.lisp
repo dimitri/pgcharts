@@ -3,7 +3,7 @@
 (defvar *routes*
       (compile-routes
        ;; User website
-       (:GET  "/"                 'front-new-query)
+       (:GET  "/"                 'front-dashboard)
        (:GET  "/js/.*"            'serve-pgcharts-js-file)
        (:GET  "/dist/.*"          'serve-bootstrap-file)
        (:GET  "/highcharts/.*"    'serve-highcharts-file)
@@ -24,9 +24,10 @@
 
        (:GET  "/users"  'front-manage-users)
 
-       (:GET  "/q"               'front-new-query)
+       (:GET  "/q"               'front-pick-db)
+       (:GET  "/q/:db"           'front-new-query)
        (:POST "/run"             'front-run-query)
-       (:GET  "/q/:id"           'front-display-query)
+       (:GET  "/q/:db/:id"       'front-display-query)
        (:GET  "/chart/:kind/:id" 'front-display-graph-given-query-id)
 
        (:POST "/chart/:kind"     'front-display-graph-given-query-text)

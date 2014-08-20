@@ -39,6 +39,12 @@
                (:file "frontend"    :depends-on ("package"
                                                  "config"
                                                  "dburi"))
+               (:file "front-main"  :depends-on ("package"
+                                                 "config"
+                                                 "dburi"))
+               (:file "front-users" :depends-on ("package"
+                                                 "config"
+                                                 "dburi"))
                (:file "front-db"    :depends-on ("package"
                                                  "config"
                                                  "read-sql-files"

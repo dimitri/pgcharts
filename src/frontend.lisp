@@ -3,10 +3,10 @@
 ;;;
 ;;; General tools to render frontend code
 ;;;
-(defvar *menu* '(("/"      . "Dashboard")
-                 ("/db"    . "Databases")
-                 ("/users" . "Users")
-                 ("/q"     . "Queries"))
+(defvar *menu* '(("/"      "dashboard" " Dashboard")
+                 ("/db"    "log-in"    " Databases")
+                 ("/users" "user"      " Users")
+                 ("/q"     "filter"    " Queries"))
   "An alist of HREF and TITLE for the main menu.")
 
 (defun compute-menu (current-url-path)
@@ -20,15 +20,19 @@
       (htm
        (:div :class "col-sm-3 col-md-2 sidebar"
              (:ul :class "nav nav-sidebar"
-                  (loop :for (href . title) :in *menu*
+                  (loop :for (href icon title) :in *menu*
                      :for active := (string= href current-url-path)
                      :do (if active
                              (htm
                               (:li :class "active"
-                                   (:a :href (str href) (str title))))
+                                   (:a :href (str href)
+                                       (:span :class (str (format nil "glyphicon glyphicon-~a" icon)))
+                                       (str title))))
                              (htm
                               (:li
-                               (:a :href (str href) (str title))))))))))))
+                               (:a :href (str href)
+                                   (:span :class (str (format nil "glyphicon glyphicon-~a" icon)))
+                                   (str title))))))))))))
 
 (defun serve-pgcharts-js-file ()
   "Serve whatever /dist/.* has been asked."

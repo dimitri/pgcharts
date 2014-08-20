@@ -3,27 +3,49 @@
 ;;;
 ;;; Frontend for query editing and result display (text or graph)
 ;;;
-(defun front-new-query ()
+
+(defun front-pick-db ()
+  "Pick a database"
+  ;; TODO: implement
+  (hunchentoot:redirect "/q/nba" :code hunchentoot:+http-moved-temporarily+))
+
+(defun front-new-query (db)
   "Allow user to enter a new query."
+  (declare (ignore db))
   (serve-page
    (with-html-output-to-string (s)
      (htm
         (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
               (:h1 :class "page-header" "SQL Query")
               (:form :role "query"
+                     :id "run-query"
                      :method "post"
                      :action "/run"
+                     :class "form-horizontal"
+                     ;; TODO: parametrize the dburi
+                     (:input :type "hidden"
+                             :id "dburi"
+                             :name "dburi"
+                             :value "pgsql:///nba")
                      (:div :class "form-group"
-                           (:div :class "input-group"
-                                 (:input :type "text" :name "dburi" :id "dburi"
-                                         :class "form-control"
-                                         :value "pgsql:///nba"
-                                         :placeholder "pgsql:///nba"
-                                         (:span :class "input-group-btn"
-                                                (:button :class "btn btn-primary"
-                                                         :type "submit"
-                                                         "Run Query"))))
-                           (:div :class "form-group"
+                           (:label :for "qname" :class "col-sm-3 control-label"
+                                   "Query name")
+                           (:div :class "col-sm-9"
+                                 (:input :type "text" :name "qname" :id "qname"
+                                         :placeholder "Enter query name"
+                                         :class "form-control")))
+                     (:div :class "form-group"
+                           (:label :for "qdesc" :class "col-sm-3 control-label"
+                                   "Query description")
+                           (:div :class "col-sm-9"
+                                 (:input :type "text" :name "qdesc" :id "qdesc"
+                                         :placeholder "Enter query description"
+                                         :class "form-control")))
+
+                     (:div :class "form-group"
+                           (:label :for "query" :class "col-sm-3 control-label"
+                                   "Query SQL")
+                           (:div :class "col-sm-9"
                                  (:textarea :id "query" :name "query" :rows "25"
                                             "with drb_stats as (
     select min(drb) as min,
@@ -35,8 +57,13 @@
           count(*) as freq
      from team_stats, drb_stats
  group by bucket
- order by bucket"))))
-              (:script "
+ order by bucket")))
+                     (:div :class "form-group"
+                           (:div :class "col-sm-offset-3 col-sm-9"
+                                 (:button :class "btn btn-primary"
+                                          :type "submit"
+                                          "Run Query")))))
+        (:script "
             var myCodeMirror = CodeMirror.fromTextArea(query, {
               lineWrapping: true,
               lineNumbers: true,
@@ -44,8 +71,7 @@
               matchBrackets: true,
               mode:  \"text/x-plsql\",
               theme: \"elegant\"
-            });"
-                       ))
+            });"))
         (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
               (:h1 :class "page-header" "Query Results")
               (:ul :class "nav nav-tabs"
