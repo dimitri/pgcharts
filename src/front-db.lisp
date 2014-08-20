@@ -16,7 +16,7 @@
                     :dbport port
                     :dbuser user
                     :dbpass pass)))
-      (front-manage-databases))))
+      (hunchentoot:redirect "/db" :code hunchentoot:+http-moved-temporarily+))))
 
 (defun front-edit-db-desc (db)
   "Output db's description within its own form"
@@ -25,12 +25,14 @@
      (:form :role "desc" :method "post" :action "/db/desc"
             (:input :type "hidden"
                     :id "dbname"
+                    :name "dbname"
                     :value (dbname db))
             (:div :class "input-group"
                   (:input :type "text"
-                          :width "10"
+                          :width "15"
                           :class "form-control"
                           :id "desc"
+                          :name "desc"
                           :value (let ((desc (description db)))
                                    (if (or (null desc) (eq desc :null)) ""
                                        desc)))
@@ -43,7 +45,7 @@
   (let ((name (hunchentoot:post-parameter "dbname"))
         (desc (hunchentoot:post-parameter "desc")))
     (with-pgsql-connection (*dburi*)
-      (query "update db set desc = ? where dbname = ?" desc name))
+      (execute "update db set description = $1 where dbname = $2" desc name))
     (front-manage-databases)))
 
 (defun front-manage-databases ()
@@ -53,7 +55,7 @@
      (htm
       (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
             (:form :role "dburi"
-                   :method "get"
+                   :method "post"
                    :action "/db/add"
                    (:div :class "form-group"
                          (:label :for "dburi"
@@ -63,7 +65,7 @@
                                (:input :type "text" :class "form-control"
                                        :id "dburi"
                                        :name "dburi"
-                                       :placeholder "pgsql://localhost/dbname")
+                                       :placeholder "pgsql://user:pass@host/dbname")
                                (:span :class "input-group-btn"
                                       (:button :class "btn btn-primary"
                                                :type "submit"
@@ -88,5 +90,5 @@
                                    (:tr
                                     (:td (str (dbname db)))
                                     (:td (str (db-uri db)))
-                                    (:td :style "width: 15em;"
+                                    (:td :style "width: 20em;"
                                          (str (front-edit-db-desc db))))))))))))))

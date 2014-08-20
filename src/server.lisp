@@ -7,6 +7,7 @@
        (:GET  "/js/.*"            'serve-pgcharts-js-file)
        (:GET  "/dist/.*"          'serve-bootstrap-file)
        (:GET  "/highcharts/.*"    'serve-highcharts-file)
+       (:GET  "/images/.*"        'serve-image-file)
        (:GET  "/test/.*"          'serve-demo-data-file)
        (:GET  "/d3.js"            'serve-d3js)
        (:GET  "/d3.v3.js"         'serve-d3js)

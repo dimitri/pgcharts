@@ -6,15 +6,35 @@
 
 (defun front-pick-db ()
   "Pick a database"
-  ;; TODO: implement
-  (hunchentoot:redirect "/q/nba" :code hunchentoot:+http-moved-temporarily+))
+  (let ((db-list (with-pgsql-connection (*dburi*)
+                   (select-dao 'db t 'dbname))))
+    (serve-page
+     (with-html-output-to-string (s)
+       (htm
+        (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+              (:h1 :class "page-header" "First, you need to pick a database")
+              (:p "The query you're going to run and edit next are to be
+              made against the database you pick now.")
+              (:div :class "row"
+                    (loop :for db :in db-list
+                       :do (htm
+                            (:div :class "col-sm-6 col-md-4"
+                                  (:div :class "thumbnail"
+                                        (:a :href (format nil "/q/~a" (dbname db))
+                                            (:img :src "/images/database_2_128.png"))
+                                        (:div :class "caption"
+                                              (:h3
+                                               (:a :href (format nil "/q/~a" (dbname db))
+                                                   (str (dbname db)))
+                                               )
+                                              (:p  (str (description db)))))))))))))))
 
 (defun front-new-query (db)
   "Allow user to enter a new query."
-  (declare (ignore db))
-  (serve-page
-   (with-html-output-to-string (s)
-     (htm
+  (let ((target-db (with-pgsql-connection (*dburi*) (get-dao 'db db))))
+    (serve-page
+     (with-html-output-to-string (s)
+       (htm
         (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
               (:h1 :class "page-header" "SQL Query")
               (:form :role "query"
@@ -22,11 +42,10 @@
                      :method "post"
                      :action "/run"
                      :class "form-horizontal"
-                     ;; TODO: parametrize the dburi
                      (:input :type "hidden"
                              :id "dburi"
                              :name "dburi"
-                             :value "pgsql:///nba")
+                             :value (db-uri target-db))
                      (:div :class "form-group"
                            (:label :for "qname" :class "col-sm-3 control-label"
                                    "Query name")
@@ -72,26 +91,26 @@
               mode:  \"text/x-plsql\",
               theme: \"elegant\"
             });"))
-        (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
-              (:h1 :class "page-header" "Query Results")
-              (:ul :class "nav nav-tabs"
-                   (:li :class "active"
-                        (:a :id "raw" :href "#raw"
-                            (:span :class "glyphicon glyphicon-th"
-                                   " Raw Results")))
-                   (:li (:a :id "col" :href "#col"
-                            (:span :class "glyphicon glyphicon-stats")
-                            " Column Chart"))
-                   (:li (:a :id "bar" :href "#bar"
-                            (:span :class "glyphicon glyphicon-align-left")
-                            " Bar Chart"))
-                   (:li (:a :id "pie" :href "#pie"
-                            (:span :class "glyphicon glyphicon-dashboard")
-                            " Pie Chart"))
-                   (:li (:a :id "donut" :href "#donut"
-                            (:span :class "glyphicon glyphicon-record")
-                            " Donut Chart")))
-              (:div :id "qresult"))))))
+       (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+             (:h1 :class "page-header" "Query Results")
+             (:ul :class "nav nav-tabs"
+                  (:li :class "active"
+                       (:a :id "raw" :href "#raw"
+                           (:span :class "glyphicon glyphicon-th"
+                                  " Raw Results")))
+                  (:li (:a :id "col" :href "#col"
+                           (:span :class "glyphicon glyphicon-stats")
+                           " Column Chart"))
+                  (:li (:a :id "bar" :href "#bar"
+                           (:span :class "glyphicon glyphicon-align-left")
+                           " Bar Chart"))
+                  (:li (:a :id "pie" :href "#pie"
+                           (:span :class "glyphicon glyphicon-dashboard")
+                           " Pie Chart"))
+                  (:li (:a :id "donut" :href "#donut"
+                           (:span :class "glyphicon glyphicon-record")
+                           " Donut Chart")))
+             (:div :id "qresult")))))))
 
 ;;; REVIEW THAT PARAMETER
 ;;;
