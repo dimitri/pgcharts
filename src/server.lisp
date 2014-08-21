@@ -33,6 +33,9 @@
        ;; Charts only
        (:GET "/c/:id"      'front-display-query-chart)
 
+       ;; Database browser
+       (:GET "/d/:dbname"  'front-browse-database)
+
        ;; AJAX API to get at query result data
        (:POST "/json"            'front-fetch-json-data)
        (:POST "/csv"             'front-fetch-csv-data)

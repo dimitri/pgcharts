@@ -38,6 +38,7 @@
 
                ;; frontend
                (:file "resources"   :depends-on ("package" "config"))
+               (:file "front-db"    :depends-on ("package" "config" "dburi"))
                (:file "front-tools" :depends-on ("package" "config" "dburi"))
                (:file "front-main"  :depends-on ("package"
                                                  "config"
