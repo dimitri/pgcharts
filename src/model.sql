@@ -56,8 +56,10 @@ create table pgcharts.query
   qname         text,
   description   text,
   sql           text,
-  x_col         text,
-  y_col         text,
+  cats          text,
+  series        text,
+  x_title       text,
+  y_title       text,
   chart_type    text
 );
 

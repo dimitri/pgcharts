@@ -52,14 +52,46 @@
                            (:div :class "col-sm-9"
                                  (:input :type "text" :name "qname" :id "qname"
                                          :placeholder "Enter query name"
-                                         :class "form-control")))
+                                         :class "form-control"
+                                         :value "drb range")))
                      (:div :class "form-group"
                            (:label :for "qdesc" :class "col-sm-3 control-label"
                                    "Query description")
                            (:div :class "col-sm-9"
                                  (:input :type "text" :name "qdesc" :id "qdesc"
                                          :placeholder "Enter query description"
-                                         :class "form-control")))
+                                         :class "form-control"
+                                         :value "Defensive rebounds, by range")))
+                     (:div :class "form-group"
+                           (:label :for "cats" :class "col-sm-3 control-label"
+                                   "Categories (x axis)")
+                           (:div :class "col-sm-3"
+                                 (:input :type "text" :name "cats" :id "cats"
+                                         :placeholder "Enter categories column name"
+                                         :class "form-control"
+                                         :value "range"))
+                           (:label :for "xtitle" :class "col-sm-2 control-label"
+                                   "X Legend")
+                           (:div :class "col-sm-4"
+                                 (:input :type "text" :name "xtitle" :id "xtitle"
+                                         :placeholder "Enter categories legend"
+                                         :class "form-control"
+                                         :value "Ranges")))
+                     (:div :class "form-group"
+                           (:label :for "series" :class "col-sm-3 control-label"
+                                   "Data series")
+                           (:div :class "col-sm-3"
+                                 (:input :type "text" :name "series" :id "series"
+                                         :placeholder "Enter data series column name"
+                                         :class "form-control"
+                                         :value "freq"))
+                           (:label :for "ytitle" :class "col-sm-2 control-label"
+                                   "Y Legend")
+                           (:div :class "col-sm-4"
+                                 (:input :type "text" :name "ytitle" :id "ytitle"
+                                         :placeholder "Enter series legend"
+                                         :class "form-control"
+                                         :value "Defensive rebounds")))
 
                      (:div :class "form-group"
                            (:label :for "query" :class "col-sm-3 control-label"

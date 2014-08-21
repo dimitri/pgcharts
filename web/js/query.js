@@ -1,6 +1,11 @@
 // pgcharts query UI
 
 var qdata;
+var qdesc;
+var qcats;
+var qseries;
+var xtitle;
+var ytitle;
 
 //
 // TABLE
@@ -73,6 +78,11 @@ $("#btn-run-query").click(function(event) {
 
     posting.done(function (data) {
         qdata = data;
+        qdesc = $("#qdesc").val();
+        qcats = $("#cats").val().toUpperCase();
+        qseries = $("#series").val().toUpperCase();
+        xtitle = $("#xtitle").val();
+        ytitle = $("#ytitle").val();
         drawTable(data);
     });
 });
@@ -86,7 +96,7 @@ function pie(JSONdata)
 
     for(i=0; i<JSONdata.length; i++)
     {
-        data.push([JSONdata[i].RANGE, JSONdata[i].FREQ]);
+        data.push([JSONdata[i][qcats], JSONdata[i][qseries]]);
     }
 
     $('#qresult').highcharts({
@@ -96,7 +106,7 @@ function pie(JSONdata)
             plotShadow: false
         },
         title: {
-            text: 'Query results'
+            text: qdesc
         },
         tooltip: {
     	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -117,7 +127,7 @@ function pie(JSONdata)
         },
         series: [{
             type: 'pie',
-            name: 'Query results',
+            name: ytitle,
             data: data
         }]
     });
@@ -138,7 +148,7 @@ function donut(JSONdata)
 
     for(i=0; i<JSONdata.length; i++)
     {
-        data.push([JSONdata[i].RANGE, JSONdata[i].FREQ]);
+        data.push([JSONdata[i][qcats], JSONdata[i][qseries]]);
     }
 
     $('#qresult').highcharts({
@@ -148,7 +158,7 @@ function donut(JSONdata)
             plotShadow: false
         },
         title: {
-            text: 'Query<br>result',
+            text: qdesc,
             align: 'center',
             verticalAlign: 'middle',
             y: 50
@@ -174,7 +184,7 @@ function donut(JSONdata)
         },
         series: [{
             type: 'pie',
-            name: 'Range',
+            name: ytitle,
             innerSize: '50%',
             data: data
         }]
@@ -197,8 +207,8 @@ function col(JSONdata)
 
     for(i=0; i<JSONdata.length; i++)
     {
-        cats.push(JSONdata[i].RANGE);
-        data.push(JSONdata[i].FREQ);
+        cats.push(JSONdata[i][qcats]);
+        data.push(JSONdata[i][qseries]);
     }
     
     $('#qresult').highcharts({
@@ -206,15 +216,18 @@ function col(JSONdata)
             type: 'column'
         },
         title: {
-            text: 'Query Result'
+            text: qdesc
         },
         xAxis: {
-            categories: cats
+            categories: cats,
+            title: {
+                text: xtitle
+            }
         },
         yAxis: {
             min: 0,
             title: {
-                text: 'Ranges'
+                text: ytitle
             }
         },
         tooltip: {
@@ -232,7 +245,7 @@ function col(JSONdata)
             }
         },
         series: [{
-            name: 'Ranges',
+            name: ytitle,
             data: data
         }]
     });
@@ -254,8 +267,8 @@ function bar(JSONdata)
 
     for(i=0; i<JSONdata.length; i++)
     {
-        cats.push(JSONdata[i].RANGE);
-        data.push(JSONdata[i].FREQ);
+        cats.push(JSONdata[i][qcats]);
+        data.push(JSONdata[i][qseries]);
     }
 
     $('#qresult').highcharts({
@@ -263,18 +276,18 @@ function bar(JSONdata)
             type: 'bar'
         },
         title: {
-            text: 'Query result'
+            text: qdesc
         },
         xAxis: {
             categories: cats,
             title: {
-                text: null
+                text: xtitle
             }
         },
         yAxis: {
             min: 0,
             title: {
-                text: 'Ranges',
+                text: ytitle,
                 align: 'high'
             },
             labels: {
@@ -306,7 +319,7 @@ function bar(JSONdata)
             enabled: false
         },
         series: [{
-            name: 'Ranges',
+            name: ytitle,
             data: data
         }]
     });
