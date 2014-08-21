@@ -53,7 +53,8 @@
                               :cats "range"
                               :series "freq"
                               :xtitle "Ranges"
-                              :ytitle "Defensive rebounds"))))
+                              :ytitle "Defensive rebounds"
+                              :chart-type "Bar"))))
     (with-html-output-to-string (s)
       (htm
        (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
