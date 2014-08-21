@@ -2,8 +2,10 @@
 
 (defvar *routes*
       (compile-routes
-       ;; User website
-       (:GET  "/"                 'front-dashboard)
+       ;; Home page
+       (:GET  "/"                 'front-list-queries)
+
+       ;; Resources
        (:GET  "/js/.*"            'serve-pgcharts-js-file)
        (:GET  "/dist/.*"          'serve-bootstrap-file)
        (:GET  "/highcharts/.*"    'serve-highcharts-file)
@@ -17,28 +19,20 @@
        (:GET  "/codemirror.css"   'serve-codemirror-css)
        (:GET  "/cm-s-elegant.css" 'serve-codemirror-theme-elegant)
 
+       ;; Server status and control
        (:GET  "/status"    'front-server-status)
 
-       (:GET  "/db"      'front-manage-databases)
-       (:POST "/db/add"  'front-add-database)
-       (:POST "/db/desc" 'front-set-database-description)
+       ;; Queries
+       (:GET  "/q"         'front-new-query)
+       (:POST "/q/save"    'front-save-query)
+       (:GET  "/q/:id"     'front-display-query)
 
-       (:GET  "/users"  'front-manage-users)
+       ;; Charts only
+       (:GET "/c/:id"      'front-display-query-chart)
 
-       (:GET  "/q"               'front-pick-db)
-       (:POST "/q/save"          'front-save-query)
-       (:GET  "/q/:db"           'front-new-query)
-       (:GET  "/q/:db/:id"       'front-display-query)
-
-       (:GET "/chart/:db/:id"    'front-display-query-chart)
-
-       (:GET  "/chart/:kind/:id" 'front-display-graph-given-query-id)
-       (:POST "/chart/:kind"     'front-display-graph-given-query-text)
-
+       ;; AJAX API to get at query result data
        (:POST "/json"            'front-fetch-json-data)
        (:POST "/csv"             'front-fetch-csv-data)
-
-       (:GET  "/demo/:chart"        'front-demo)
        ))
 
 (defvar *acceptor* nil "The Web Server")

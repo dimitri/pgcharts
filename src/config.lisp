@@ -36,12 +36,6 @@
 (defparameter *codemirror-theme-elegant*
   (asdf:system-relative-pathname :pgcharts "web/codemirror-4.0/theme/elegant.css"))
 
-(defparameter *charts-root*
-  (asdf:system-relative-pathname :pgcharts "web/charts/"))
-
-(defparameter *charts-demo-root*
-  (asdf:system-relative-pathname :pgcharts "web/demo/"))
-
 (defparameter *header-path*
   (asdf:system-relative-pathname :pgcharts "web/header.html"))
 

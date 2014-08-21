@@ -69,8 +69,8 @@ function display_result()
     var posting = $.ajax({
         type: "POST",
         url: "/json",
-        data: {"dburi": $("#dburi").val(),
-               "query": $("#query").val()},
+        data: {"dbname": $("#dbname").val(),
+               "query":  myCodeMirror.getValue()},
         dataType: "json"
     });
 
@@ -272,7 +272,7 @@ function col(JSONdata)
     });
 };
 
-$("#col").click(function(event) {
+$("#column").click(function(event) {
     $(this).tab('show');
     $("#qresult").empty();
     col(qdata);

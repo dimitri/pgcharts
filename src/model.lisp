@@ -100,3 +100,11 @@
     (let ((qid (when (slot-boundp query 'id) (qid query))))
       (with-slots (dbname qname) query
         (format stream "/q/~a~@[/~a~] [~a]" dbname qid qname)))))
+
+(defmethod q/url ((query query))
+  "Return the HREF where to display and edit the query."
+  (format nil "/q/~36r" (qid query)))
+
+(defmethod c/url ((query query))
+  "Return the HREF where to admire the query chart."
+  (format nil "/c/~36r" (qid query)))

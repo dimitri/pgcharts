@@ -6,55 +6,22 @@
 (defvar *chart-types* '("Column" "Bar" "Pie" "Donut")
   "Known chart types.")
 
-(defun front-pick-db ()
-  "Pick a database"
-  (let ((db-list (with-pgsql-connection (*dburi*)
-                   (select-dao 'db t 'dbname))))
-    (serve-page
-     (with-html-output-to-string (s)
-       (htm
-        (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
-              (:h1 :class "page-header" "First, you need to pick a database")
-              (:p "The query you're going to run and edit next are to be
-              made against the database you pick now.")
-              (:div :class "row"
-                    (loop :for db :in db-list
-                       :do (htm
-                            (:div :class "col-sm-6 col-md-4"
-                                  (:div :class "thumbnail"
-                                        (:a :href (format nil "/q/~a" (dbname db))
-                                            (:img :src "/images/database_2_128.png"))
-                                        (:div :class "caption"
-                                              (:h3
-                                               (:a :href (format nil "/q/~a" (dbname db))
-                                                   (str (dbname db)))
-                                               )
-                                              (:p  (str (description db)))))))))))))))
-
-(defun front-edit-query (db &optional qid form-style)
+(defun front-edit-query (&optional qid form-style)
   "Return the HTML to display a query form."
-  (let ((q (if qid (with-pgsql-connection (*dburi*)
-                     (get-dao 'query (parse-integer qid :radix 36)))
-               (make-instance 'query
-                              :dbname db
-                              :qname "drb range"
-                              :description "Defensive rebounds, by range"
-                              :sql "with drb_stats as (
-    select min(drb) as min,
-           max(drb) as max
-      from team_stats
-)
-   select width_bucket(drb, min, max, 9) as bucket,
-          int4range(min(drb), max(drb), '[]') as range,
-          count(*) as freq
-     from team_stats, drb_stats
- group by bucket
- order by bucket"
-                              :cats "range"
-                              :series "freq"
-                              :xtitle "Ranges"
-                              :ytitle "Defensive rebounds"
-                              :chart-type "Bar"))))
+  (destructuring-bind (&key q ((:d dbname-list)))
+      (with-pgsql-connection (*dburi*)
+         (list :q (if qid (get-dao 'query (parse-integer qid :radix 36))
+                    (make-instance 'query
+                                   :dbname ""
+                                   :qname ""
+                                   :description ""
+                                   :sql ""
+                                   :cats ""
+                                   :series ""
+                                   :xtitle ""
+                                   :ytitle ""
+                                   :chart-type ""))
+               :d (query "select dbname from db order by 1" :column)))
     (with-html-output-to-string (s)
       (htm
        (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
@@ -66,10 +33,15 @@
                     :class "form-horizontal"
                     :style form-style
                     (:input :type "hidden" :id "qid" :name "qid" :value qid)
-                    (:input :type "hidden" :id "dbname" :name "dbname" :value db)
-                    (:input :type "hidden" :id "dburi" :name "dburi"
-                            :value (db-uri (with-pgsql-connection (*dburi*)
-                                             (get-dao 'db db))))
+                    (:div :class "form-group"
+                          (:label :for "dbname" :class "col-sm-3 control-label"
+                                  "Database name")
+                          (:div :class "col-sm-9"
+                                (:select :id "dbname"
+                                         :name "dbname"
+                                         :class "form-control"
+                                         (loop :for dbname :in dbname-list
+                                            :do (htm (:option (str dbname)))))))
                     (:div :class "form-group"
                           (:label :for "qname" :class "col-sm-3 control-label"
                                   "Query name")
@@ -167,7 +139,7 @@
                      (:a :id "raw" :href "#raw"
                          (:span :class "glyphicon glyphicon-th"
                                 " Raw Results")))
-                (:li (:a :id "col" :href "#col"
+                (:li (:a :id "column" :href "#column"
                          (:span :class "glyphicon glyphicon-stats")
                          " Column Chart"))
                 (:li (:a :id "bar" :href "#bar"
@@ -181,30 +153,30 @@
                          " Donut Chart")))
            (:div :id "qresult")))))
 
-(defun front-new-query (db)
+(defun front-new-query ()
   "Allow user to enter a new query."
   (serve-page
    (with-html-output-to-string (s)
      (htm
-      (str (front-edit-query db))
-      (str (front-query-result)))))))
+      (str (front-edit-query))
+      (str (front-query-result))))))
 
-(defun front-display-query (db qid)
+(defun front-display-query (qid)
   "Allow user to run and edit a known query."
   (serve-page
    (with-html-output-to-string (s)
      (htm
-      (str (front-edit-query db qid))
+      (str (front-edit-query qid))
       (str (front-query-result))))))
 
-(defun front-display-query-chart (db qid)
+(defun front-display-query-chart (qid)
   "Display only the #qresult pane for given query."
   (let ((q (with-pgsql-connection (*dburi*)
              (get-dao 'query (parse-integer qid :radix 36)))))
     (serve-page
      (with-html-output-to-string (s)
        (htm
-        (str (front-edit-query db qid "display: none;"))
+        (str (front-edit-query qid "display: none;"))
         (str (front-query-result (qdesc q)))
         (:script "doit = true;"))))))
 
@@ -224,10 +196,12 @@
   "Given an SQL query and a connection string given as POST parameters,
    return the query result-set as CSV data."
   (setf (hunchentoot:content-type*) "text/plain")
-  (let* ((dburi  (hunchentoot:post-parameter "dburi"))
-         (query  (hunchentoot:post-parameter "query"))
-         (data   (with-pgsql-connection (dburi)
-                   (query query :alists))))
+  (let* ((dbname  (hunchentoot:post-parameter "dbname"))
+         (query   (hunchentoot:post-parameter "query"))
+         (qdburi  (with-pgsql-connection (*dburi*)
+                    (db-uri (get-dao 'db dbname))))
+         (data    (with-pgsql-connection (qdburi)
+                    (query query :alists))))
     (format nil "[~{~a~^, ~}]"
             (loop :for row :in data
                :collect (with-output-to-string (s)
@@ -262,5 +236,5 @@
                                             :xtitle xtitle :ytitle ytitle
                                             :chart-type chart-type)))))
         ;; and now redirect to editing that same query
-        (hunchentoot:redirect (format nil "/q/~a/~36r" dbname (qid query))
+        (hunchentoot:redirect (q/url query)
                               :code hunchentoot:+http-moved-temporarily+)))))

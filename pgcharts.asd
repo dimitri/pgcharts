@@ -18,6 +18,7 @@
                  #:daemon               ; run the repo server in the background
                  #:cl-who               ; HTML production from lisp code
                  #:cl-markdown          ; HTML production from Markdown docs
+                 #:trivial-backtrace    ; Produces backtraces
 		 )
     :components
     ((:module "lib"
@@ -36,18 +37,10 @@
                                                     "dburi"))
 
                ;; frontend
-               (:file "frontend"    :depends-on ("package"
-                                                 "config"
-                                                 "dburi"))
+               (:file "resources"   :depends-on ("package" "config"))
+               (:file "front-tools" :depends-on ("package" "config" "dburi"))
                (:file "front-main"  :depends-on ("package"
                                                  "config"
-                                                 "dburi"))
-               (:file "front-users" :depends-on ("package"
-                                                 "config"
-                                                 "dburi"))
-               (:file "front-db"    :depends-on ("package"
-                                                 "config"
-                                                 "read-sql-files"
                                                  "dburi"))
                (:file "front-query" :depends-on ("package"
                                                  "config"
@@ -57,7 +50,8 @@
                ;; http server control and main routing
                (:file "server"   :depends-on ("package"
                                               "config"
-                                              "frontend"
-                                              "frontend-db"))
+                                              "front-tools"
+                                              "front-main"
+                                              "front-query"))
                (:file "pgcharts" :depends-on ("package"))))))
 
