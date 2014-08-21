@@ -1,5 +1,4 @@
 // pgcharts query UI
-
 var qdata;
 var qdesc;
 var qcats;
@@ -59,10 +58,8 @@ $("#raw").click(function(event) {
     drawTable(qdata);
 });
 
-$("#btn-run-query").click(function(event) {
-    // alert( "Handler for .submit() called." );
-    event.preventDefault();
-
+function display_result()
+{
     $("#raw").tab('show');
 
     h2 = $("<h2 />");
@@ -103,6 +100,12 @@ $("#btn-run-query").click(function(event) {
             drawTable(data);
         }
     });
+}
+
+$("#btn-run-query").click(function(event) {
+    // alert( "Handler for .submit() called." );
+    event.preventDefault();
+    display_result();
 });
 
 //
@@ -348,3 +351,8 @@ $("#bar").click(function(event) {
     $("#qresult").empty();
     bar(qdata);
 });
+
+if (doit)
+{
+    display_result();
+}

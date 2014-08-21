@@ -29,8 +29,10 @@
        (:POST "/q/save"          'front-save-query)
        (:GET  "/q/:db"           'front-new-query)
        (:GET  "/q/:db/:id"       'front-display-query)
-       (:GET  "/chart/:kind/:id" 'front-display-graph-given-query-id)
 
+       (:GET "/chart/:db/:id"    'front-display-query-chart)
+
+       (:GET  "/chart/:kind/:id" 'front-display-graph-given-query-id)
        (:POST "/chart/:kind"     'front-display-graph-given-query-text)
 
        (:POST "/json"            'front-fetch-json-data)
