@@ -18,10 +18,14 @@
                        (:a :href "/" (:span :class "glyphicon glyphicon-filter"
                                             " "
                                             (str "Queries"))))
-                  (:li :class (when (string= current-url-path "/q") "active")
-                       (:a :href "/q" (:span :class "glyphicon glyphicon-tasks"
-                                            " "
-                                            (str "New Query")) ))
+                  (:li :class (when (string= current-url-path "/q/raw") "active")
+                       (:a :href "/q/raw" (:span :class "glyphicon glyphicon-pencil"
+                                                 " "
+                                                 (str "New Query")) ))
+                  (:li :class (when (string= current-url-path "/q/new") "active")
+                       (:a :href "/q/new" (:span :class "glyphicon glyphicon-tasks"
+                                                 " "
+                                                 (str "New Chart")) ))
                   (:hr)
                   (loop :for db
                      :in (with-pgsql-connection (*dburi*)

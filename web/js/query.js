@@ -108,6 +108,36 @@ $("#btn-run-query").click(function(event) {
     display_result();
 });
 
+
+$("#btn-save-raw-query").click(function(event) {
+    // alert( "Handler for .submit() called." );
+    event.preventDefault();
+
+    var query = {
+        "dbname": $("#dbname").val(),
+        "qname":  $("#qname").val(),
+        "qdesc":  $("#qdesc").val(),
+        "query":  myCodeMirror.getValue()
+    };
+    
+    var myForm    = document.createElement("form");
+    myForm.method = "post";
+    myForm.action = "/q/save";
+    
+    for (var k in query)
+    {
+        var myInput = document.createElement("input") ;
+        myInput.setAttribute("name", k) ;
+        myInput.setAttribute("value", query[k]);
+        myForm.appendChild(myInput) ;
+    }
+
+    document.body.appendChild(myForm);
+    myForm.submit();
+    document.body.removeChild(myForm);
+});
+
+
 //
 // PIE
 //

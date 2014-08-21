@@ -23,7 +23,10 @@
        (:GET  "/status"    'front-server-status)
 
        ;; Queries
-       (:GET  "/q"         'front-new-query)
+       (:GET  "/q/new"     'front-new-query)
+       (:GET  "/q/raw/:id" 'front-raw-query)
+       (:GET  "/q/raw"     'front-raw-query)
+       (:POST "/q/raw"     'front-raw-query) ; one-page style form
        (:POST "/q/save"    'front-save-query)
        (:GET  "/q/:id"     'front-display-query)
 

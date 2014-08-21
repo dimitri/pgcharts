@@ -98,12 +98,16 @@
 (defmethod print-object ((query query) stream)
   (print-unreadable-object (query stream :type t :identity t)
     (let ((qid (when (slot-boundp query 'id) (qid query))))
-      (with-slots (dbname qname) query
-        (format stream "/q/~a~@[/~a~] [~a]" dbname qid qname)))))
+      (with-slots (qname) query
+        (format stream "/q/~@[/~36r~] [~a]" qid qname)))))
 
 (defmethod q/url ((query query))
   "Return the HREF where to display and edit the query."
   (format nil "/q/~36r" (qid query)))
+
+(defmethod q/raw/url ((query query))
+  "Return the HREF where to display and edit the query."
+  (format nil "/q/raw/~36r" (qid query)))
 
 (defmethod c/url ((query query))
   "Return the HREF where to admire the query chart."

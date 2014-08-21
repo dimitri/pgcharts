@@ -3,7 +3,7 @@
 ;;;
 ;;; Frontend for query editing and result display (text or graph)
 ;;;
-(defvar *chart-types* '("Column" "Bar" "Pie" "Donut")
+(defvar *chart-types* '("Raw" "Column" "Bar" "Pie" "Donut")
   "Known chart types.")
 
 (defun front-edit-query (&optional qid form-style)
@@ -22,6 +22,9 @@
                                    :ytitle ""
                                    :chart-type ""))
                :d (query "select dbname from db order by 1" :column)))
+    (when (string= "Raw" (chart-type q))
+      (hunchentoot:redirect (q/raw/url q)
+                            :code hunchentoot:+http-moved-temporarily+))
     (with-html-output-to-string (s)
       (htm
        (:div :class "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
@@ -184,9 +187,11 @@
   "Given an SQL query and a connection string given as POST parameters,
    return the query result-set as CSV data."
   (setf (hunchentoot:content-type*) "text/plain")
-  (let* ((dburi  (hunchentoot:post-parameter "dburi"))
+  (let* ((dname  (hunchentoot:post-parameter "dburi"))
          (query  (hunchentoot:post-parameter "query"))
-         (data   (with-pgsql-connection (dburi)
+         (qdburi  (with-pgsql-connection (*dburi*)
+                    (db-uri (get-dao 'db dbname))))
+         (data   (with-pgsql-connection (qdburi)
                    (query query))))
     (with-output-to-string (s)
      (loop :for row :in data
@@ -214,27 +219,29 @@
         (qname      (hunchentoot:post-parameter "qname"))
         (qdesc      (hunchentoot:post-parameter "qdesc"))
         (query      (hunchentoot:post-parameter "query"))
-        (qcats      (hunchentoot:post-parameter "cats"))
-        (qseries    (hunchentoot:post-parameter "series"))
-        (xtitle     (hunchentoot:post-parameter "xtitle"))
-        (ytitle     (hunchentoot:post-parameter "ytitle"))
-        (chart-type (hunchentoot:post-parameter "chart-type")))
+        (qcats      (or (hunchentoot:post-parameter "cats") :null))
+        (qseries    (or (hunchentoot:post-parameter "series") :null))
+        (xtitle     (or (hunchentoot:post-parameter "xtitle") :null))
+        (ytitle     (or (hunchentoot:post-parameter "ytitle") :null))
+        (chart-type (or (hunchentoot:post-parameter "chart-type") "Raw")))
     (with-pgsql-connection (*dburi*)
       ;; basically insert or update, depending on whether we already have a
       ;; query id or not.
       (let ((query
-             (if qid
-                 (make-dao 'query
-                           :dbname dbname
-                           :qname qname   :description qdesc   :sql query
-                           :cats qcats    :series qseries
-                           :xtitle xtitle :ytitle ytitle :chart-type chart-type)
+             (if (and qid (not (string= "" qid)))
+                 ;; update existing query that we have the id of
                  (update-dao (make-instance 'query
                                             :dbname dbname :qname qname
                                             :description qdesc :sql query
                                             :cats qcats    :series qseries
                                             :xtitle xtitle :ytitle ytitle
-                                            :chart-type chart-type)))))
+                                            :chart-type chart-type))
+               ;; create a new query in the pgcharts database
+               (make-dao 'query
+                         :dbname dbname
+                         :qname qname   :description qdesc   :sql query
+                         :cats qcats    :series qseries
+                         :xtitle xtitle :ytitle ytitle :chart-type chart-type))))
         ;; and now redirect to editing that same query
         (hunchentoot:redirect (q/url query)
                               :code hunchentoot:+http-moved-temporarily+)))))
