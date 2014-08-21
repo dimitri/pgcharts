@@ -6,6 +6,7 @@ var qcats;
 var qseries;
 var xtitle;
 var ytitle;
+var type;
 
 //
 // TABLE
@@ -83,7 +84,24 @@ $("#btn-run-query").click(function(event) {
         qseries = $("#series").val().toUpperCase();
         xtitle = $("#xtitle").val();
         ytitle = $("#ytitle").val();
-        drawTable(data);
+        type = $("#chart-type option:selected").val().toLowerCase();
+
+        if (type)
+        {
+            $("#"+type).tab("show");
+            $("#qresult").empty();
+            switch(type)
+            {
+                case "column":  col(data); break;
+                case "bar":     bar(data); break;
+                case "pie":     pie(data); break;
+                case "donut": donut(data); break;
+            }
+        }
+        else
+        {
+            drawTable(data);
+        }
     });
 });
 

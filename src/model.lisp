@@ -70,3 +70,33 @@
                  :dbport port
                  :dbuser user
                  :dbpass pass))
+
+
+;;;
+;;; Save the queries!
+;;;
+(defclass query ()
+    ((id          :col-type integer :reader qid)
+     (dbname      :accessor dbname  :initarg :dbname
+                  :col-type string  :col-name db)
+     (qname       :col-type string  :accessor qname   :initarg :qname)
+     (description :col-type string  :accessor qdesc   :initarg :description)
+     (sql         :col-type integer :accessor qsql    :initarg :sql)
+     (cats        :col-type string  :accessor qcats   :initarg :cats)
+     (series      :col-type string  :accessor qseries :initarg :series)
+     (xtitle      :col-type string  :col-name x_title
+                  :accessor xtitle  :initarg :xtitle)
+     (ytitle      :col-type string  :col-name y_title
+                  :accessor ytitle  :initarg :ytitle)
+     (chart-type  :col-type string  :col-name chart_type
+                  :accessor chart-type :initarg :chart-type))
+  (:documentation
+   "a pgchart query")
+  (:metaclass dao-class)
+  (:keys id))
+
+(defmethod print-object ((query query) stream)
+  (print-unreadable-object (query stream :type t :identity t)
+    (let ((qid (when (slot-boundp query 'id) (qid query))))
+      (with-slots (dbname qname) query
+        (format stream "/q/~a~@[/~a~] [~a]" dbname qid qname)))))
