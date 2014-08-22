@@ -98,6 +98,7 @@ $(PGCHARTS): $(MANIFEST) $(BUILDAPP) $(LISP_SRC)
                          --asdf-tree $(QLDIR)/dists              \
                          --asdf-path .                           \
                          --load-system $(APP_NAME)               \
+                         --load src/image.lisp                   \
                          --entry pgcharts:main                   \
                          --dynamic-space-size 4096               \
                          $(COMPRESS_CORE_OPT)                    \
