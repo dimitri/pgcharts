@@ -34,7 +34,7 @@
                      :do (htm
                           (:li :class (when active "active")
                                (:a :href (format nil "/d/~a" (dbname db))
-                                   (:span :class "glyphicon glyphicon-th-large")
+                                   (:span :class "glyphicon glyphicon-folder-open")
                                    " "
                                    (str (dbname db))))))))))))
 
