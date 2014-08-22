@@ -3,8 +3,6 @@
 ---
 create schema if not exists pgcharts;
 
-alter database pgcharts set search_path to pgcharts, public;
-
 create table pgcharts.db
 (
   dbname      text primary key,

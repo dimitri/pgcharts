@@ -38,7 +38,14 @@
   model as defined in *model*."
   (unless (model-installed-p dburi)
     (with-pgsql-connection (dburi)
-      (loop :for sql :in *model* :do (query sql)))))
+      (loop :for sql :in *model* :do (query sql))
+
+      ;; and an extra SQL statement is needed here
+      (destructuring-bind (dbname &rest ignore)
+          (parse-pgsql-connection-string dburi)
+        (declare (ignore ignore))
+        (execute (format nil "alter database ~a set search_path to pgcharts"
+                         dbname))))))
 
 
 ;;;
