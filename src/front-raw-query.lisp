@@ -36,6 +36,7 @@
                      :method "post"
                      :action "/q/raw"
                      :class "form-horizontal"
+                     (:input :type "hidden" :id "qid" :name "qid" :value qid)
                      (:input :type "hidden"
                              :id "chart-type" :name "chart-type" :value "raw")
                      (:div :class "form-group"

@@ -114,10 +114,11 @@ $("#btn-save-raw-query").click(function(event) {
     event.preventDefault();
 
     var query = {
+        "qid":    $("#qid").val(),
         "dbname": $("#dbname").val(),
         "qname":  $("#qname").val(),
         "qdesc":  $("#qdesc").val(),
-        "query":  myCodeMirror.getValue()
+        "query":  myCodeMirror.getValue("\n")
     };
     
     var myForm    = document.createElement("form");

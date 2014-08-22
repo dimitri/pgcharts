@@ -76,7 +76,7 @@
 ;;; Save the queries!
 ;;;
 (defclass query ()
-    ((id          :col-type integer :reader qid)
+    ((id          :col-type integer :reader qid       :initarg :id)
      (dbname      :accessor dbname  :initarg :dbname
                   :col-type string  :col-name db)
      (qname       :col-type string  :accessor qname   :initarg :qname)

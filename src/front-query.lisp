@@ -231,6 +231,7 @@
              (if (and qid (not (string= "" qid)))
                  ;; update existing query that we have the id of
                  (update-dao (make-instance 'query
+                                            :id (parse-integer qid :radix 36)
                                             :dbname dbname :qname qname
                                             :description qdesc :sql query
                                             :cats qcats    :series qseries
