@@ -33,12 +33,15 @@
        ;; Charts only
        (:GET "/c/:id"      'front-display-query-chart)
 
+       ;; AJAX API to get at query result data
+       (:POST "/json"      'front-fetch-json-data)
+       (:POST "/csv"       'front-fetch-csv-data)
+
        ;; Database browser
        (:GET "/d/:dbname"  'front-browse-database)
 
-       ;; AJAX API to get at query result data
-       (:POST "/json"            'front-fetch-json-data)
-       (:POST "/csv"             'front-fetch-csv-data)
+       ;; Search
+       (:GET "/s"          'front-search-queries)
        ))
 
 (defvar *acceptor* nil "The Web Server")
