@@ -31,10 +31,10 @@
   (asdf:system-relative-pathname :pgcharts "web/codemirror-compressed.js"))
 
 (defparameter *codemirror-css*
-  (asdf:system-relative-pathname :pgcharts "web/codemirror-4.0/lib/codemirror.css"))
+  (asdf:system-relative-pathname :pgcharts "web/codemirror-4.5/lib/codemirror.css"))
 
 (defparameter *codemirror-theme-elegant*
-  (asdf:system-relative-pathname :pgcharts "web/codemirror-4.0/theme/elegant.css"))
+  (asdf:system-relative-pathname :pgcharts "web/codemirror-4.5/theme/elegant.css"))
 
 (defparameter *header-path*
   (asdf:system-relative-pathname :pgcharts "web/header.html"))
