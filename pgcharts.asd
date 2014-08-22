@@ -30,6 +30,7 @@
               ((:file "package")
                (:file "dburi"          :depends-on ("package"))
                (:file "config"         :depends-on ("package"))
+               (:file "cache"          :depends-on ("package"))
                (:file "read-sql-files" :depends-on ("package"))
                (:file "model"          :depends-on ("package"
                                                     "config"

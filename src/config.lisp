@@ -41,3 +41,6 @@
 
 (defparameter *footer-path*
   (asdf:system-relative-pathname :pgcharts "web/footer.html"))
+
+(defvar *serve-from-cache* nil
+  "Set to t to serve static resources from in-memory cache.")
