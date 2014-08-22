@@ -41,7 +41,7 @@
 (defmacro serve-page (content)
   "Return the content with header and footer and menu, and handle errors."
   `(concatenate 'string
-                (read-file-into-string *header-path*)
+                (serve-header)
                 (compute-menu "/#q")
 
                 (handler-case
@@ -61,4 +61,4 @@
                                                                   :output nil
                                                                   :verbose t))))))))
 
-                (read-file-into-string *footer-path*)))
+                (serve-footer)))
