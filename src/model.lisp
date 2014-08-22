@@ -20,20 +20,25 @@
   "List of table names expected to be created by *model*, to allow for
    checking if the setup has been made.")
 
-(defun ensure-model-is-installed (&optional (dburi *dburi*))
-  "Check that the given database connection DBURI contains the SQL data
-  model as defined in *model*."
+(defun model-installed-p (&optional (dburi *dburi*))
+  "Check that we find all our table definitions."
   (with-pgsql-connection (dburi)
     (let ((table-list (query "select nspname || '.' || relname as relname
                                    from      pg_class c
                                         join pg_namespace n
                                           on c.relnamespace = n.oid
-                                  where n.nspname = 'pginstall'
+                                  where n.nspname = 'pgcharts'
                                         and c.relkind = 'r'
                                order by relname"
-                                :column)))
-      (unless (equalp *model-table-list* table-list)
-        (loop :for sql :in *model* :do (query sql))))))
+                             :column)))
+      (equalp *model-table-list* table-list))))
+
+(defun ensure-model-is-installed (&optional (dburi *dburi*))
+  "Check that the given database connection DBURI contains the SQL data
+  model as defined in *model*."
+  (unless (model-installed-p dburi)
+    (with-pgsql-connection (dburi)
+      (loop :for sql :in *model* :do (query sql)))))
 
 
 ;;;

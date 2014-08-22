@@ -43,8 +43,9 @@
 (defvar *acceptor* nil "The Web Server")
 (defvar *server-is-running* nil)
 
-(defun start-server ()
+(defun start-server (&key (logs *terminal-io*))
   "Start the web server"
+  (read-config)
   (when *acceptor*
     (error "The web server is already running."))
 
@@ -52,8 +53,8 @@
                                   :routes '*routes*
                                   :port *listen-port*
                                   :document-root *document-root*
-                                  :access-log-destination *terminal-io*
-                                  :message-log-destination *terminal-io*))
+                                  :access-log-destination logs
+                                  :message-log-destination logs))
   (hunchentoot:start *acceptor*)
   (setf *server-is-running* t))
 

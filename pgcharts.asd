@@ -17,8 +17,8 @@
                  #:closer-mop           ; introspection
                  #:daemon               ; run the repo server in the background
                  #:cl-who               ; HTML production from lisp code
-                 #:cl-markdown          ; HTML production from Markdown docs
                  #:trivial-backtrace    ; Produces backtraces
+                 #:drakma               ; HTTP client, to check server status
 		 )
     :components
     ((:module "lib"
@@ -28,32 +28,36 @@
               :depends-on ("lib")
 	      :components
               ((:file "package")
-               (:file "dburi"          :depends-on ("package"))
-               (:file "config"         :depends-on ("package"))
-               (:file "cache"          :depends-on ("package"))
-               (:file "read-sql-files" :depends-on ("package"))
-               (:file "model"          :depends-on ("package"
-                                                    "config"
-                                                    "read-sql-files"
-                                                    "dburi"))
+               (:module utils
+                        :depends-on ("package")
+                        :components ((:file "dburi")
+                                     (:file "cache")
+                                     (:file "cli-parser")
+                                     (:file "read-sql-files")))
+
+               (:file "config"         :depends-on ("package" "utils"))
+               (:file "model"          :depends-on ("package" "utils"))
 
                ;; frontend
-               (:file "resources"   :depends-on ("package" "config"))
-               (:file "front-db"    :depends-on ("package" "config" "dburi"))
-               (:file "front-tools" :depends-on ("package" "config" "dburi"))
-               (:file "front-main"  :depends-on ("package"
-                                                 "config"
-                                                 "dburi"))
-               (:file "front-query" :depends-on ("package"
-                                                 "config"
-                                                 "read-sql-files"
-                                                 "dburi"))
+               (:file "resources"   :depends-on ("package" "utils"))
+               (:file "front-tools" :depends-on ("package" "utils"))
+               (:file "front-db"    :depends-on ("package" "utils" "front-tools"))
+               (:file "front-main"  :depends-on ("package" "utils" "front-tools"))
+               (:file "front-query" :depends-on ("package" "utils" "front-tools"))
+
+               (:file "front-raw-query" :depends-on ("package"
+                                                     "utils"
+                                                     "front-tools"
+                                                     "front-query"))
 
                ;; http server control and main routing
                (:file "server"   :depends-on ("package"
-                                              "config"
+                                              "utils"
                                               "front-tools"
                                               "front-main"
+                                              "front-db"
                                               "front-query"))
-               (:file "pgcharts" :depends-on ("package"))))))
+
+               ;; main entry point for the binary (command line)
+               (:file "pgcharts" :depends-on ("package" "utils"))))))
 

@@ -29,8 +29,8 @@ register user queries and their charts setup:
 Once the database has been created, it's necessary to *register* the
 database servers you want to run queries against:
     
-    $ pgcharts add pgsql://user:pass@host/dbname
-    $ pgcharts add pgsql://user:pass@host/seconddbname
+    $ pgcharts register pgsql://user:pass@host/dbname
+    $ pgcharts register pgsql://user:pass@host/seconddbname
     
 Then you can start the service, which defaults to listening to
 [http://localhost:9042/]():
