@@ -246,3 +246,10 @@
         ;; and now redirect to editing that same query
         (hunchentoot:redirect (q/url query)
                               :code hunchentoot:+http-moved-temporarily+)))))
+
+(defun front-delete-query (id)
+  "Delete given query then get back on the listing page."
+  (with-pgsql-connection (*dburi*)
+    (delete-dao (make-instance 'query :id (parse-integer id :radix 36))))
+  ;; and back to the listing
+  (hunchentoot:redirect "/" :code hunchentoot:+http-moved-temporarily+))

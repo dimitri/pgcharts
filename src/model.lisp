@@ -109,6 +109,10 @@
   "Return the HREF where to display and edit the query."
   (format nil "/q/raw/~36r" (qid query)))
 
+(defmethod q/del/url ((query query))
+  "Return the HREF where to display and edit the query."
+  (format nil "/q/del/~36r" (qid query)))
+
 (defmethod c/url ((query query))
   "Return the HREF where to admire the query chart."
   (format nil "/c/~36r" (qid query)))

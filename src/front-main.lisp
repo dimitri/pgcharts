@@ -16,23 +16,22 @@
                            (:tr (:th "Query")
                                 (:th "Database")
                                 (:th "Description")
-                                (:th "X Title")
-                                (:th "Y Title")
                                 (:th "Chart")))
                           (:tbody
                            (loop :for query :in query-list
                               :do (htm
                                    (:tr
                                     (:td (:a :href (q/url query)
-                                             (:span :class "glyphicon glyphicon-edit
-"
-                                                    " "
-                                                    (str (format nil "~36r" (qid query))))))
+                                             (str (format nil "~36r" (qid query))))
+                                         " "
+                                         (:a :href (q/url query)
+                                             (:span :class "glyphicon glyphicon-edit"))
+                                         " "
+                                         (:a :href (q/del/url query)
+                                          (:span :class "glyphicon glyphicon-remove")))
                                     (:td (str (dbname query)))
                                     (:td (:a :href (q/url query)
                                              (str (qdesc query))))
-                                    (:td (str (xtitle query)))
-                                    (:td (str (ytitle query)))
                                     (:td (:a :href (c/url query)
                                              (:span :class "glyphicon glyphicon-stats"
                                                     " "

@@ -28,6 +28,7 @@
        (:GET  "/q/raw"     'front-raw-query)
        (:POST "/q/raw"     'front-raw-query) ; one-page style form
        (:POST "/q/save"    'front-save-query)
+       (:GET  "/q/del/:id" 'front-delete-query)
        (:GET  "/q/:id"     'front-display-query)
 
        ;; Charts only
