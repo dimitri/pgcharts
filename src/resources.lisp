@@ -48,8 +48,8 @@
     fs)
   "File system as an hash-table in memory.")
 
-(defparameter *header*              (read-file-into-string *header-path*))
-(defparameter *footer*              (read-file-into-string *footer-path*))
+(defparameter *header* (read-file-into-string *header-path*))
+(defparameter *footer* (read-file-into-string *footer-path*))
 
 ;;;
 ;;; General tools to render web static resources
@@ -102,7 +102,7 @@
         (hunchentoot:handle-static-file filename))))
 
 (defun serve-pgcharts-js-file ()
-  "Serve whatever /dist/.* has been asked."
+  "Serve whatever /js/.* has been asked."
   (serve-static-file *js-root* (hunchentoot:script-name*)))
 
 (defun serve-bootstrap-file ()
