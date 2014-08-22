@@ -9,6 +9,9 @@
 (defparameter *listen-port* 9042
   "Port bound by the repository server, exposing the HTTP protocol.")
 
+(defparameter *pidfile* "~/.pgcharts.pid"
+  "pgcharts pid file")
+
 (defparameter *logfile* "/tmp/pgcharts.log"
   "Main logfile for pgcharts")
 
@@ -84,11 +87,17 @@
          (setf *listen-port*
                (parse-integer (ini:get-option conf "pgcharts" "port"))))
 
+       ;; pidfile
+       (when (ini:has-option-p conf "pgcharts" "pidfile")
+         (setf *pidfile*
+               (expand-user-homedir-pathname
+                (ini:get-option conf "pgcharts" "pidfile"))))
+
        ;; logfile
-       (when (ini:has-option-p conf "pgcharts" "logs")
+       (when (ini:has-option-p conf "pgcharts" "logfile")
          (setf *logfile*
                (expand-user-homedir-pathname
-                (ini:get-option conf "pgcharts" "logs")))))
+                (ini:get-option conf "pgcharts" "logfile")))))
 
       ini)))
 
@@ -104,7 +113,8 @@
       (ini:add-section conf "pgcharts")
       (ini:set-option conf "pgcharts" "dburi" *dburi*)
       (ini:set-option conf "pgcharts" "port"  *listen-port*)
-      (ini:set-option conf "pgcharts" "logs"  (uiop:native-namestring *logfile*))
+      (ini:set-option conf "pgcharts" "pidfile"  (uiop:native-namestring *pidfile*))
+      (ini:set-option conf "pgcharts" "logfile"  (uiop:native-namestring *logfile*))
 
       (ini:write-stream conf s)
 
@@ -114,22 +124,45 @@
   "Return configuration value for KEY."
   (cond ((string-equal key "dburi") *dburi*)
         ((string-equal key "port")  *listen-port*)
-        ((string-equal key "logs")  (uiop:native-namestring *logfile*))))
+        ((string-equal key "pidfile")  (uiop:native-namestring *pidfile*))
+        ((string-equal key "logfile")  (uiop:native-namestring *logfile*))))
 
 (defun (setf config-value) (val key)
   "Set configuration variable NAME to NEWVALUE."
   (cond ((string-equal key "dburi")
-                    (let ((*dburi* val))
-                      (validate-dburi *dburi*)
-                      (write-config)))
+         (let ((*dburi* val))
+           (validate-dburi *dburi*)
+           (write-config)))
 
-                   ((string-equal key "port")
-                    (let ((*listen-port* (parse-integer val)))
-                      (write-config)))
+        ((string-equal key "port")
+         (let ((*listen-port* (parse-integer val)))
+           (write-config)))
 
-                   ((string-equal key "logs")
-                    (let ((*logfile* (expand-user-homedir-pathname val)))
-                      (write-config)))
+        ((string-equal key "pidfile")
+         (let ((*pidfile* (expand-user-homedir-pathname val)))
+           (write-config)))
 
-                   (t (error "Unknown parameter ~s.~%" key)))
+        ((string-equal key "logfile")
+         (let ((*logfile* (expand-user-homedir-pathname val)))
+           (write-config)))
+
+        (t (error "Unknown parameter ~s.~%" key)))
   val)
+
+
+;;;
+;;; pidfile reading
+;;;
+(defun read-pid (&optional (pidfile *pidfile*))
+  "Read the server's pid from *pidfile* and return it as a string."
+  (with-open-file (s pidfile) (read-line s)))
+
+(defun kill-pid (pid &optional (sig "TERM"))
+  "Send given SIG to Unix process PID."
+  (multiple-value-bind (output error code)
+      (uiop:run-program `("/bin/kill" ,(format nil "-~a" sig) ,pid)
+                        :output :string
+                        :error :string
+                        :ignore-error-status t)
+    (declare (ignore output error))
+    (= 0 code)))

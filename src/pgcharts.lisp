@@ -87,6 +87,14 @@
              :mesg    "pgcharts is not running"
              :detail  (format nil "~a" e)))))
 
+(define-command (("pid") ())
+    "prints the PID of the server, if running"
+  (format t "~a~%" (read-pid *pidfile*)))
+
+(define-command (("stop") ())
+    "stop the pgcharts web server"
+  (kill-server))
+
 (define-command (("start") ())
     "start the pgcharts web server"
   (check-setup)
@@ -94,6 +102,7 @@
     (unless (and status (string= "OK" status))
       (daemon:daemonize :output *logfile*
                         :error  *logfile*
+                        :pidfile *pidfile*
                         :exit-parent t
                         :sigterm (lambda (sig)
                                    (declare (ignore sig))
@@ -141,6 +150,11 @@
         body
         (error 'server-error
                :uri uri :status status-code :reason reason :body body))))
+
+(defun kill-server (&optional (sig "TERM"))
+  "Send a signal to the server for it to stop"
+  (when (kill-pid (read-pid *pidfile*) sig)
+    (ignore-errors (delete-file *pidfile*))))
 
 (defun register-db (dburi)
   "Register a new database server."
