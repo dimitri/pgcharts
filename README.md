@@ -74,8 +74,32 @@ of librairies that are available through the *Quicklisp* distribution
 system. The included `Makefile` cares about building a self-contained binary
 for you, and can be used as following:
 
+    $ <install recent sbcl>
     $ make
     $ ./build/bin/pgcharts --help
 
 Note that the self-contained binary also includes static web resources such
 as *jquery*, *bootstrap*, *Highcharts* and *codemirror*.
+
+## Build Dependencies
+
+You need a recent enough [SBCL](http://sbcl.org/) Common Lisp compiler to be
+able to compile pgcharts. It's easy to install on Linux, MacOSX and Windows.
+
+    debian$ sudo apt-get install sbcl
+    centos$ sudo yum install sbcl
+    macosx$ brew install sbcl
+
+When using `debian stable` you might need to *backport* a recent enough
+version of the compiler, because stable contains a very old version of it as
+seen at [http://packages.debian.org/search?keywords=sbcl](). You will find
+my backport at [http://pgsql.tapoueh.org/sbcl/]() to get you started
+quickly, or apply the following recipe:
+
+    $ <add sid as a deb-src source in /etc/apt/sources.list.d/*
+    $ sudo apt-get udpate
+    $ sudo apt-get build-dep sbcl
+    $ sudo apt-get source -b sbcl
+    $ sudo dpkg -i <resulting sbcl-*.deb>
+
+That's about it.
