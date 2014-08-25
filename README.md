@@ -2,7 +2,7 @@
 
 ## Screen Shots
 
-It's intended as a visaul project. Here's what it looks like:
+It's intended as a visual project. Here's what it looks like:
 
 ![pgcharts-query](https://raw.github.com/dimitri/pgcharts/master/propaganda/pgcharts-query.png)
 
@@ -53,7 +53,7 @@ away, and see nice charts from their results!
 
 # Implementation
 
-pgchart needs a database where to handle its own data, as it is storing a
+pgchart needs a database where to store its own data, as it needs a
 list of database connections (where to run the queries) and a list of
 queries (with a name and a tags list).
 
@@ -79,7 +79,7 @@ to.
 
 # Install
 
-The *pgcharts* application has been written in Common Lisp and uses a bunch
+The *pgcharts* application is written in Common Lisp and uses a bunch
 of librairies that are available through the *Quicklisp* distribution
 system. The included `Makefile` cares about building a self-contained binary
 for you, and can be used as following:
