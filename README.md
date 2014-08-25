@@ -2,11 +2,26 @@
 
 ## Screen Shots
 
-It's intended as a visaul project. Here's what it looks like:
+It's intended as a visual project. Here's what it looks like.
+
+### Query editing pane
 
 ![pgcharts-query](https://raw.github.com/dimitri/pgcharts/master/propaganda/pgcharts-query.png)
 
+### Chart pane
+
 ![pgcharts-bar-chart](https://raw.github.com/dimitri/pgcharts/master/propaganda/pgcharts-bar-chart.png)
+
+### Query listing pane
+
+![pgcharts-query-list](https://raw.github.com/dimitri/pgcharts/master/propaganda/pgcharts-query-list.png)
+
+### Chart only pane
+
+So that you can give an URL to just the chart for your coworkers to see (and
+download as a PDF, PNG, JPEG or SVG document):
+
+![pgcharts-chart](https://raw.github.com/dimitri/pgcharts/master/propaganda/pgcharts-chart.png)
 
 ## Description
 
