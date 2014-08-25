@@ -51,12 +51,6 @@ register user queries and their charts setup:
     $ createdb pgcharts
     $ pgcharts setup pgsql://localhost/pgcharts
     
-Once the database has been created, it's necessary to *register* the
-database servers you want to run queries against:
-    
-    $ pgcharts register pgsql://user:pass@host/dbname
-    $ pgcharts register pgsql://user:pass@host/seconddbname
-    
 Then you can start the service, which defaults to listening to
 [http://localhost:9042/]():
 
@@ -65,6 +59,21 @@ Then you can start the service, which defaults to listening to
 
 Now, you can use *pgcharts* from your browser. Issue new query, save them
 away, and see nice charts from their results!
+
+# Registering databases
+
+Once the *pgcharts* database has been created, it's necessary to
+***register*** the database servers you want to run queries against:
+    
+    $ pgcharts register pgsql://user:pass@host/dbname
+    $ pgcharts register pgsql://user:pass@host/seconddbname?sslmode=require
+    
+The *sslmode* option accepts the following values: `disable`, `allow`,
+`prefer` and `require`. The `allow` and `prefer` options are implements in
+the same way, translating to the
+[Postmodern](https://marijnhaverbeke.nl/postmodern/postmodern.html)
+PostgreSQL driver's value `:try`, where `:try` means *if the server supports
+it*.
 
 # Implementation
 

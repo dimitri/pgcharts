@@ -77,19 +77,43 @@
 		(declare (ignore slash))
 		(list :dbname dbname)))
 
+(defrule dsn-option-ssl-disable "disable" (:constant :no))
+(defrule dsn-option-ssl-allow   "allow"   (:constant :try))
+(defrule dsn-option-ssl-prefer  "prefer"  (:constant :try))
+(defrule dsn-option-ssl-require "require" (:constant :yes))
+
+(defrule dsn-option-ssl (and "sslmode" "=" (or dsn-option-ssl-disable
+                                               dsn-option-ssl-allow
+                                               dsn-option-ssl-prefer
+                                               dsn-option-ssl-require))
+  (:lambda (ssl)
+    (destructuring-bind (key e val) ssl
+      (declare (ignore key e))
+      (cons :use-ssl val))))
+
+(defrule dsn-option (or dsn-option-ssl))
+
+(defrule dsn-options (and "?" (* dsn-option))
+  (:lambda (options)
+    (destructuring-bind (qm opts) options
+      (declare (ignore qm))
+      (alexandria:alist-plist opts))))
+
 (defrule dsn-prefix (or "pgsql://" "postgresql://") (:constant nil))
 
 (defrule db-connection-uri (and dsn-prefix
 				(? dsn-user-password)
 				(? dsn-hostname)
-				dsn-dbname)
+				dsn-dbname
+                                (? dsn-options))
   (:lambda (uri)
     (destructuring-bind (&key type
 			      user
 			      password
 			      host
 			      port
-			      dbname)
+			      dbname
+                              (use-ssl :no))
 	(apply #'append uri)
 
       (declare (ignore type))
@@ -115,7 +139,9 @@
                                 #-unix "localhost"))
 
             :port (or port
-                      (parse-integer (getenv-default "PGPORT" "5432")))))))
+                      (parse-integer (getenv-default "PGPORT" "5432")))
+
+            :use-ssl use-ssl))))
 
 
 ;;;
