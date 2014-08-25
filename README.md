@@ -1,5 +1,15 @@
 # PostgreSQL Charts
 
+## Screen Shots
+
+It's intended as a visaul project. Here's what it looks like:
+
+![pgcharts-query](https://raw.github.com/dimitri/pgcharts/master/propaganda/pgcharts-query.png)
+
+![pgcharts-bar-chart](https://raw.github.com/dimitri/pgcharts/master/propaganda/pgcharts-bar-chart.png)
+
+## Description
+
 The *pgcharts* projects is a little web application that takes as input an
 SQL query text and outputs its data in one of the following forms:
 
