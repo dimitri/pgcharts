@@ -102,7 +102,7 @@
 
             (or user (getenv-default "PGUSER" (getenv-default "USER")))
 
-            password
+            (or password (getenv-default "PGPASSWORD"))
 
             (or (when host
                   (destructuring-bind (type &optional name) host
