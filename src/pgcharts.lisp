@@ -159,8 +159,9 @@
 (defun register-db (dburi)
   "Register a new database server."
   (when (validate-dburi dburi)
-    (destructuring-bind (name user pass host &key (port 5432))
+    (destructuring-bind (name user pass host &key (port 5432) (use-ssl :no))
         (parse-pgsql-connection-string dburi)
+      (declare (ignore use-ssl))
       (with-pgsql-connection (*dburi*)
         (make-dao 'db
                   :dbname name
