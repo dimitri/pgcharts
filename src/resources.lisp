@@ -31,20 +31,19 @@
                     (load-static-file fs pathname url)))))
     (uiop:collect-sub*directories root #'collectp #'recursep #'collector)))
 
+(defvar *url-to-dir-mapping* `(("js"         . ,*js-root*)
+                               ("dist"       . ,*bootstrap-root*)
+                               ("highcharts" . ,*highcharts-root*)
+                               ("cm"         . ,*codemirror-root*)
+                               ("images"     . ,*images-root*))
+  "Map URL first directory to its on-disk locations.")
+
 (defparameter *fs*
   (let ((fs (make-hash-table :test #'equal)))
-    (loop :for (root . url-path) :in `((,*js-root*         . "/js")
-                                       (,*images-root*     . "/images")
-                                       (,*bootstrap-root*  . "/dist")
-                                       (,*highcharts-root* . "/highcharts"))
+    (loop :for (first-dir . root ) :in *url-to-dir-mapping*
+       :for url-path := (format nil "/~a" first-dir)
        :for root-dir := (uiop:ensure-directory-pathname root)
        :do (load-static-directory fs root-dir url-path))
-
-    (loop :for (filename . url-path)
-       :in `((,*codemirror-js*  . "/codemirror.js")
-             (,*codemirror-css* . "/codemirror.css")
-             (,*codemirror-theme-elegant* . "/cm-s-elegant.css"))
-       :do (load-static-file fs filename url-path))
     fs)
   "File system as an hash-table in memory.")
 
@@ -69,50 +68,27 @@
   (if *serve-from-cache* *footer*
       (read-file-into-string *footer-path*)))
 
-(defun serve-codemirror-js ()
-  "Serve the d3js file, minified."
-  (if *serve-from-cache*
-      (handle-loaded-file (hunchentoot:script-name*))
-      (hunchentoot:handle-static-file *codemirror-js*)))
-
-(defun serve-codemirror-css ()
-  "Serve the d3js file, minified."
-  (if *serve-from-cache*
-      (handle-loaded-file (hunchentoot:script-name*))
-      (hunchentoot:handle-static-file *codemirror-css*)))
-
-(defun serve-codemirror-theme-elegant ()
-  "Serve the d3js file, minified."
-  (if *serve-from-cache*
-      (handle-loaded-file (hunchentoot:script-name*))
-      (hunchentoot:handle-static-file *codemirror-theme-elegant*)))
-
 
 ;;;
 ;;; Sub-directories
 ;;;
-(defun serve-static-file (root script-name &key (depth 1))
-  "Serve a static file given a ROOT location and a SCRIPT-NAME.
+(defun serve-resource-from-file (&optional
+                                   (script-name (hunchentoot:script-name*)))
+  "Serve a static resource from a file"
+  (destructuring-bind (first-dir &rest components)
+      ;; the url always begins with a / and we skip it
+      (cdr (split-sequence #\/ script-name))
+    (let* ((root     (cdr (assoc first-dir *url-to-dir-mapping* :test #'string=)))
+           (filename (format nil "~a/~{~a~^/~}" root components)))
+      (hunchentoot:handle-static-file filename))))
 
-   Skip DEPTH leading directory entries in SCRIPT-NAME."
+(defun serve-resource-from-cache (&optional
+                                    (script-name (hunchentoot:script-name*)))
+  "Serve a static resource from the cache"
+  (handle-loaded-file script-name))
+
+(defun serve-resource ()
+  "Serve a static resource"
   (if *serve-from-cache*
-      (handle-loaded-file script-name)
-      (let* ((components (nthcdr (+ 1 depth) (split-sequence #\/ script-name)))
-             (filename   (format nil "~a/~{~a~^/~}" root components)))
-        (hunchentoot:handle-static-file filename))))
-
-(defun serve-pgcharts-js-file ()
-  "Serve whatever /js/.* has been asked."
-  (serve-static-file *js-root* (hunchentoot:script-name*)))
-
-(defun serve-bootstrap-file ()
-  "Serve whatever /dist/.* has been asked."
-  (serve-static-file *bootstrap-root* (hunchentoot:script-name*)))
-
-(defun serve-highcharts-file ()
-  "Serve whatever /dist/.* has been asked."
-  (serve-static-file *highcharts-root* (hunchentoot:script-name*)))
-
-(defun serve-image-file ()
-  "Serve whatever /dist/.* has been asked."
-  (serve-static-file *images-root* (hunchentoot:script-name*)))
+      (serve-resource-from-cache)
+      (serve-resource-from-file)))

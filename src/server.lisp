@@ -6,13 +6,11 @@
        (:GET  "/"                 'front-list-queries)
 
        ;; Resources
-       (:GET  "/js/.*"            'serve-pgcharts-js-file)
-       (:GET  "/dist/.*"          'serve-bootstrap-file)
-       (:GET  "/highcharts/.*"    'serve-highcharts-file)
-       (:GET  "/images/.*"        'serve-image-file)
-       (:GET  "/codemirror.js"    'serve-codemirror-js)
-       (:GET  "/codemirror.css"   'serve-codemirror-css)
-       (:GET  "/cm-s-elegant.css" 'serve-codemirror-theme-elegant)
+       (:GET  "/js/.*"            'serve-resource)
+       (:GET  "/dist/.*"          'serve-resource)
+       (:GET  "/highcharts/.*"    'serve-resource)
+       (:GET  "/images/.*"        'serve-resource)
+       (:GET  "/cm/.*"            'serve-resource)
 
        ;; Server status and control
        (:GET  "/status"    'front-server-status)
@@ -52,7 +50,7 @@
   (setf *acceptor* (make-instance 'simpleroutes-acceptor
                                   :routes '*routes*
                                   :port *listen-port*
-                                  :document-root *document-root*
+                                  :document-root nil
                                   :access-log-destination logs
                                   :message-log-destination logs))
   (hunchentoot:start *acceptor*)

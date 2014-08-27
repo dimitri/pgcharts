@@ -30,17 +30,11 @@
 (defparameter *highcharts-root*
   (asdf:system-relative-pathname :pgcharts "web/highcharts"))
 
+(defparameter *codemirror-root*
+  (asdf:system-relative-pathname :pgcharts "web/codemirror-4.5"))
+
 (defparameter *d3js*
   (asdf:system-relative-pathname :pgcharts "web/d3js/d3.min.js"))
-
-(defparameter *codemirror-js*
-  (asdf:system-relative-pathname :pgcharts "web/codemirror-compressed.js"))
-
-(defparameter *codemirror-css*
-  (asdf:system-relative-pathname :pgcharts "web/codemirror-4.5/lib/codemirror.css"))
-
-(defparameter *codemirror-theme-elegant*
-  (asdf:system-relative-pathname :pgcharts "web/codemirror-4.5/theme/elegant.css"))
 
 (defparameter *header-path*
   (asdf:system-relative-pathname :pgcharts "web/header.html"))
