@@ -28,7 +28,7 @@
   (asdf:system-relative-pathname :pgcharts "web/images"))
 
 (defparameter *highcharts-root*
-  (asdf:system-relative-pathname :pgcharts "web/Highcharts"))
+  (asdf:system-relative-pathname :pgcharts "web/highcharts"))
 
 (defparameter *d3js*
   (asdf:system-relative-pathname :pgcharts "web/d3js/d3.min.js"))
