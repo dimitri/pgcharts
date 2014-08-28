@@ -3,11 +3,13 @@
 ;;;
 ;;; Tools to install our model.sql objects into the database
 ;;;
-
 (defparameter *model*
   (read-queries
    (asdf:system-relative-pathname :pgcharts "src/model.sql"))
   "The SQL model as a list of queries.")
+
+(defparameter *catversion* "20140828"
+  "Version number for the catalog.")
 
 (defparameter *model-table-list*
   (sort
@@ -20,7 +22,7 @@
   "List of table names expected to be created by *model*, to allow for
    checking if the setup has been made.")
 
-(defun model-installed-p (&optional (dburi *dburi*))
+(defun model-version (&optional (dburi *dburi*))
   "Check that we find all our table definitions."
   (with-pgsql-connection (dburi)
     (let ((table-list (query "select nspname || '.' || relname as relname
@@ -31,21 +33,46 @@
                                         and c.relkind = 'r'
                                order by relname"
                              :column)))
-      (equalp *model-table-list* table-list))))
+      (if (member "pgcharts.catalog" table-list :test #'string=)
+          (query "select version from pgcharts.catalog" :single)
+          (when (equalp table-list '("pgcharts.db" "pgcharts.query"))
+              "20140823")))))
 
-(defun ensure-model-is-installed (&optional (dburi *dburi*))
+(defun install-model-from-scratch (&optional (dburi *dburi*))
   "Check that the given database connection DBURI contains the SQL data
   model as defined in *model*."
-  (unless (model-installed-p dburi)
-    (with-pgsql-connection (dburi)
+  (with-pgsql-connection (dburi)
+    (with-transaction ()
       (loop :for sql :in *model* :do (query sql))
 
       ;; and an extra SQL statement is needed here
       (destructuring-bind (dbname &rest ignore)
           (parse-pgsql-connection-string dburi)
         (declare (ignore ignore))
+        (execute "insert into pgcharts.catalog(version) values($1)" *catversion*)
         (execute (format nil "alter database ~a set search_path to pgcharts"
                          dbname))))))
+
+(defun upgrade-model (current-version &optional (dburi *dburi*))
+  "Upgrade the database model by rolling out SQL upgrade scripts."
+  (let ((script-name-list (find-update-path current-version *catversion*)))
+    (loop :for script-name :in script-name-list
+       :for queries := (cdr (assoc script-name *upgrade-scripts* :test #'string=))
+       :do (with-pgsql-connection (dburi)
+             (format t "Rolling out upgrade script ~a~%" script-name)
+             (with-transaction ()
+               (loop :for sql :in queries :do (query sql)))))))
+
+(defun ensure-model-is-current (&optional (dburi *dburi*))
+  "Check the current model's version and upgrade it if needed."
+  (let ((version (model-version dburi)))
+    (cond ((null version)
+           (format t "Installing pgcharts database model.~%")
+           (install-model-from-scratch dburi))
+
+          ((string/= version *catversion*)
+           (format t "Upgrading pgcharts database model.~%")
+           (upgrade-model version)))))
 
 
 ;;;
@@ -55,33 +82,15 @@
 ;;;
 (defclass db ()
     ((dbname      :col-type integer :accessor dbname :initarg :dbname)
-     (description :col-type string  :accessor description :initarg :description)
-     (dbhost      :col-type string  :accessor dbhost :initarg :dbhost)
-     (dbport      :col-type integer :accessor dbport :initarg :dbport)
-     (dbuser      :col-type string  :accessor dbuser :initarg :dbuser)
-     (dbpass      :col-type string  :accessor dbpass :initarg :dbpass))
+     (dburi       :col-type string  :accessor db-uri :initarg :dburi))
   (:documentation
    "a database connection string, where to run queries.")
   (:metaclass dao-class)
   (:keys dbname))
 
-(defmethod db-uri ((db db) &optional stream)
-  "Print the pgsql:// URI of DB into STREAM."
-  (with-slots (dbname dbhost dbport dbuser) db
-    (format stream "pgsql://~a@~a:~d/~a" dbuser dbhost dbport dbname)))
-
 (defmethod print-object ((db db) stream)
   (print-unreadable-object (db stream :type t :identity t)
     (db-uri db stream)))
-
-(defun make-db (name user pass host &key (port 5432))
-  "Create a db instance given the same parameters as Postmodern connect."
-  (make-instance 'db
-                 :dbname name
-                 :dbhost host
-                 :dbport port
-                 :dbuser user
-                 :dbpass pass))
 
 
 ;;;

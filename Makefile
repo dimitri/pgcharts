@@ -4,9 +4,11 @@ APP_NAME   = pgcharts
 # use either sbcl or ccl
 CL	   = sbcl
 
-LISP_SRC   = pgcharts.asd         \
-            $(wildcard src/*lisp) \
-            $(wildcard src/utils/*lisp)
+SRC       = pgcharts.asd                  \
+            $(wildcard src/*lisp)         \
+            $(wildcard src/utils/*lisp)   \
+            $(wildcard src/sql/*lisp)     \
+            $(wildcard src/sql/*sql)
 
 BUILDDIR   = build
 LIBS       = $(BUILDDIR)/libs.stamp
@@ -88,7 +90,7 @@ $(BUILDAPP_SBCL): $(QLDIR)/setup.lisp
 
 buildapp: $(BUILDAPP) ;
 
-$(PGCHARTS): $(MANIFEST) $(BUILDAPP) $(LISP_SRC)
+$(PGCHARTS): $(MANIFEST) $(BUILDAPP) $(SRC)
 	mkdir -p $(BUILDDIR)/bin
 	$(BUILDAPP)      --logfile /tmp/build.log                \
                          $(BUILDAPP_OPTS)                        \

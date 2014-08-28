@@ -76,7 +76,7 @@
     "setup the pgcharts database"
   (let ((*dburi*  (or dburi *dburi*)))
     (write-config)
-    (ensure-model-is-installed)))
+    (ensure-model-is-current)))
 
 (define-command (("status") ())
     "get the status of the currently running server"
@@ -159,16 +159,10 @@
 (defun register-db (dburi)
   "Register a new database server."
   (when (validate-dburi dburi)
-    (destructuring-bind (name user pass host &key (port 5432) (use-ssl :no))
+    (destructuring-bind (name &rest nil)
         (parse-pgsql-connection-string dburi)
-      (declare (ignore use-ssl))
       (with-pgsql-connection (*dburi*)
-        (make-dao 'db
-                  :dbname name
-                  :dbhost host
-                  :dbport port
-                  :dbuser user
-                  :dbpass pass)))))
+        (make-dao 'db :dbname name :dburi dburi)))))
 
 (defun check-setup ()
   "Signal a condition when the setup isn't ready for starting the service."
@@ -188,8 +182,5 @@
                              "createdb dbname; then set dburi:"
                              "run: pgcharts setup pgsql://user:pass@host/dbname"))))
 
-  (unless (model-installed-p *dburi*)
-    (error 'cli-error
-           :mesg   "pgcharts database model isn't setup"
-           :detail "pgcharts needs to install its own database model"
-           :hint   "run: pgcharts setup")))
+  ;; If necessary, do the initial setup, or maybe upgrade the database
+  (ensure-model-is-current *dburi*))

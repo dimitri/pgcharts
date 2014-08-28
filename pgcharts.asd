@@ -19,6 +19,7 @@
                  #:cl-who               ; HTML production from lisp code
                  #:trivial-backtrace    ; Produces backtraces
                  #:drakma               ; HTTP client, to check server status
+                 #:graph                ; Find SQL model upgrade paths
 		 )
     :components
     ((:module "lib"
@@ -34,9 +35,12 @@
                                      (:file "cache")
                                      (:file "cli-parser")
                                      (:file "read-sql-files")))
+               (:module sql
+                        :depends-on ("package" "utils")
+                        :components ((:file "model-update")))
 
                (:file "config"         :depends-on ("package" "utils"))
-               (:file "model"          :depends-on ("package" "utils"))
+               (:file "model"          :depends-on ("package" "utils" "sql"))
 
                ;; frontend
                (:file "resources"   :depends-on ("package" "utils"))

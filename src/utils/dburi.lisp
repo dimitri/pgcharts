@@ -153,7 +153,7 @@
 
    Examples:
       IN: postgresql://dim@localhost:54393/pginstall
-     OUT: '(\"pginstall\" \"dim\" nil \"localhost\" :port 54393)
+     OUT: '(\"pginstall\" \"dim\" nil \"localhost\" :port 54393 :use-ssl :no)
 
    The default port, when omitted, comes from the environment variable PGPORT."
   (parse 'db-connection-uri connection-string))

@@ -3,14 +3,15 @@
 ---
 create schema if not exists pgcharts;
 
+create table pgcharts.catalog
+(
+  version     text primary key
+);
+
 create table pgcharts.db
 (
   dbname      text primary key,
-  description text,
-  dbhost      text,
-  dbport      integer,
-  dbuser      text,
-  dbpass      text
+  dburi       text
 );
 
 -- the minvalue is just so that we begin with 3 letters URLs
