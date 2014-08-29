@@ -137,3 +137,33 @@
 (defmethod c/url ((query query))
   "Return the HREF where to admire the query chart."
   (format nil "/c/~36r" (qid query)))
+
+
+;;;
+;;; Monkey patch simple-date formatting
+;;;
+(defmethod print-object ((date simple-date:date) stream)
+  (multiple-value-bind (year month day) (simple-date:decode-date date)
+    (format stream "~2,'0d-~2,'0d-~4,'0d" day month year)))
+
+(defmethod print-object ((stamp simple-date:timestamp) stream)
+  (multiple-value-bind (year month day hour min sec ms)
+      (simple-date:decode-timestamp stamp)
+    (format stream "~2,'0d-~2,'0d-~4,'0dT~2,'0d:~2,'0d:~2,'0d~@[,~3,'0d~]"
+            day month year hour min sec (if (zerop ms) nil ms))))
+
+(defmethod print-object ((interval simple-date:interval) stream)
+  (multiple-value-bind (year month day hour min sec ms)
+      (simple-date:decode-interval interval)
+    (flet ((not-zero (x) (if (zerop x) nil x)))
+      (format stream "P~@[~dY~]~@[~dM~]~@[~dD~]~@[~dH~]~@[~dm~]~@[~d~@[,~3,'0d~]S~]"
+              (not-zero year) (not-zero month) (not-zero day)
+              (not-zero hour) (not-zero min)
+              (if (and (zerop sec) (zerop ms)) nil sec) (not-zero ms)))))
+
+;;;
+;;; And provide YaSON encoding functions
+;;;
+(defmethod yason:encode ((date simple-date:date)
+                         &optional (stream *standard-output*))
+  (format stream "\"~a\"" date))

@@ -7,6 +7,7 @@
     :license "The PostgreSQL Licence"
     :depends-on (#:uiop			; host system integration
 		 #:postmodern		; PostgreSQL protocol implementation
+                 #:simple-date          ; Handling of pgsql date formats
 		 #:esrap		; parser generator
 		 #:py-configparser	; Read old-style INI config files
                  #:split-sequence       ; split strings
