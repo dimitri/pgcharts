@@ -1,6 +1,6 @@
 Source: pgcharts
 Priority: extra
-Maintainer: Dimitri Fontaine <dimitri@2ndQuadrant.fr>
+Maintainer: Dimitri Fontaine <dim@tapoueh.org>
 Uploaders: Christoph Berg <myon@debian.org>
 Build-Depends: debhelper (>= 9), sbcl (>= 1.2.0), buildapp (>= 1.5), cl-asdf (>= 3.0.3), cl-postmodern, cl-simple-date, cl-esrap, cl-py-configparser, cl-split-sequence, cl-ppcre, cl-alexandria, cl-hunchentoot, cl-yason, cl-closer-mop, cl-daemon, cl-who, cl-bordeaux-threads (>= 0.8.3), cl-curry-compose-reader-macros, cl-metabang-bind, cl-graph, cl-trivial-backtrace, cl-drakma, ruby-ronn
 Standards-Version: 3.9.5
@@ -11,7 +11,7 @@ Vcs-Browser: https://github.com/dimitri/pgcharts
 
 Package: pgcharts
 Section: database
-Architecture: all
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: turn your PostgreSQL queries into charts
  pgcharts is a little web application that takes as input an SQL query text
