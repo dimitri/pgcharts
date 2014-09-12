@@ -1,0 +1,40 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+PKGVERS = $(shell dpkg-parsechangelog | awk -F '[:-]' '/^Version:/ { print substr($$2, 2) }')
+EXCLUDE = --exclude-vcs --exclude=debian --exclude=build --exclude=.vagrant
+
+orig: clean
+	cd .. && tar czf pgcharts_$(PKGVERS).orig.tar.gz $(EXCLUDE) pgcharts
+
+override_dh_auto_build:
+	mkdir -p build/bin
+	buildapp --logfile /tmp/pgcharts-build.log          \
+                 --require sb-posix                         \
+                 --load /usr/share/common-lisp/source/cl-asdf/build/asdf.lisp \
+                 --asdf-path .                              \
+                 --asdf-tree /usr/share/common-lisp/systems \
+                 --load-system pgcharts               	    \
+                 --load src/image.lisp                      \
+                 --load debian/settings.lisp                \
+                 --entry pgcharts:main                      \
+                 --dynamic-space-size 4096                  \
+                 --compress-core                    	    \
+                 --output build/bin/pgcharts
+
+override_dh_auto_test:
+	# no nothing
+
+override_dh_strip:
+	# do nothing
+
+%:
+	dh $@ 

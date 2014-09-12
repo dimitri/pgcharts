@@ -46,6 +46,9 @@ DEBUILD_ROOT = /tmp/pgcharts
 
 all: $(PGCHARTS)
 
+docs:
+	ronn -roff pginstall.1.md
+
 clean:
 	rm -rf $(LIBS) $(QUICKLISP) $(QLDIR) $(MANIFEST) $(BUILDAPP) $(PGCHARTS)
 
@@ -110,8 +113,8 @@ pgcharts: $(PGCHARTS) ;
 
 deb:
 	# intended for use on a debian system
-	mkdir -p $(DEBUILD_ROOT) && rm -rf $(DEBUILD_ROOT)/*
-	rsync -Ca --exclude=build/* ./ $(DEBUILD_ROOT)/
+	mkdir -p $(DEBUILD_ROOT) && rm -rf $(DEBUILD_ROOT)
+	rsync -Ca --exclude=build --exclude=.vagrant ./ $(DEBUILD_ROOT)/
 	cd $(DEBUILD_ROOT) && make -f debian/rules orig
 	cd $(DEBUILD_ROOT) && debuild -us -uc -sa
 	cp -a /tmp/pgcharts_* build/
