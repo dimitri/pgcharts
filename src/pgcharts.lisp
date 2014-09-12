@@ -159,8 +159,9 @@
 (defun register-db (dburi)
   "Register a new database server."
   (when (validate-dburi dburi)
-    (destructuring-bind (name &rest nil)
+    (destructuring-bind (name &rest rest)
         (parse-pgsql-connection-string dburi)
+      (declare (ignore rest))
       (with-pgsql-connection (*dburi*)
         (make-dao 'db :dbname name :dburi dburi)))))
 
