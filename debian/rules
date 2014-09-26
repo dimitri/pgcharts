@@ -12,11 +12,23 @@
 PKGVERS = $(shell dpkg-parsechangelog | awk -F '[:-]' '/^Version:/ { print substr($$2, 2) }')
 EXCLUDE = --exclude-vcs --exclude=debian --exclude=build --exclude=.vagrant
 
+BITS = $(shell dpkg-architecture -qDEB_BUILD_ARCH_BITS)
+ifeq ($(BITS),32)
+SIZE=1024
+else
+SIZE=4096
+endif
+
+# buildd provides a build environment where $HOME is not writable, but the
+# CL compilers here will need to fill-in a per-user cache
+export HOME = $(CURDIR)/debian/home
+
 orig: clean
 	cd .. && tar czf pgcharts_$(PKGVERS).orig.tar.gz $(EXCLUDE) pgcharts
 
 override_dh_auto_build:
 	mkdir -p build/bin
+	mkdir -p $(HOME)
 	buildapp --logfile /tmp/pgcharts-build.log          \
                  --require sb-posix                         \
                  --load /usr/share/common-lisp/source/cl-asdf/build/asdf.lisp \
@@ -26,7 +38,7 @@ override_dh_auto_build:
                  --load src/image.lisp                      \
                  --load debian/settings.lisp                \
                  --entry pgcharts:main                      \
-                 --dynamic-space-size 4096                  \
+                 --dynamic-space-size $(SIZE)               \
                  --compress-core                    	    \
                  --output build/bin/pgcharts
 
