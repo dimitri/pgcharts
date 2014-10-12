@@ -44,7 +44,9 @@
                                          :name "dbname"
                                          :class "form-control"
                                          (loop :for dbname :in dbname-list
-                                            :do (htm (:option (str dbname)))))))
+                                            :for on := (string= dbname (dbname q))
+                                            :do (htm (:option :selected on
+                                                              (str dbname)))))))
                     (:div :class "form-group"
                           (:label :for "qname" :class "col-sm-3 control-label"
                                   "Query name")
