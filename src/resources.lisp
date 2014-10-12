@@ -35,7 +35,9 @@
                                ("dist"       . ,*bootstrap-root*)
                                ("highcharts" . ,*highcharts-root*)
                                ("cm"         . ,*codemirror-root*)
-                               ("images"     . ,*images-root*))
+                               ("images"     . ,*images-root*)
+                               ("hallo"      . ,*hallo-root*)
+                               ("fa"         . ,*fontawesome-root*))
   "Map URL first directory to its on-disk locations.")
 
 (defparameter *fs*

@@ -1,0 +1,127 @@
+body {
+    padding-left: 20%;
+    padding-right: 20%;
+    padding-top: 50px;
+    background-color: #eeeeec;
+}
+
+article {
+    display: block;
+    line-height: 1.5em;
+}
+
+article h1, h2 {
+    font-family: "Georgia", serif;
+    font-variant: small-caps;
+    margin-bottom: 0px;
+    padding-bottom: 0.5em;
+}
+
+article h1 {
+    font-size: 24pt;
+}
+
+article h2 {
+    font-size: 20pt;
+}
+
+article p {
+    margin-top: 0px;
+    margin-bottom: 0.5em;
+    text-indent: 2em;
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+    font-size: 16pt;
+    line-height: 21pt;
+}
+
+article .download {
+    text-align: center;
+    margin: 1em;
+}
+
+article .download a {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+div.hallotoolbar {
+    border: 1px solid #babdb6;
+    padding: 2px;
+    background-color: #eeeeec;
+    border-radius: 6px;
+    font-size: 12pt;
+    line-height: 1.1em;
+    width: 260px;
+    z-index: 500;
+}
+
+div.hallotoolbar .dropdown-menu {
+    width: "200px";
+    background-color: #eeeeec;
+    margin-top: -1px;
+    border-left: 1px solid #babdb6;
+    border-bottom: 1px solid #babdb6;
+    border-right: 1px solid #babdb6;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+div.hallotoolbar .dropdown-menu .selected {
+    background-color: #729fcf;
+}
+
+textarea#source {
+    width: 100%;
+    min-height: 400px;
+    color: #ffffff !important;
+    background-color: #2e3436;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+[contenteditable="true"].inEditMode {
+    outline-style: auto;
+    outline-width: 3px;
+    outline-color: #111111;
+}
+
+/* ANNOTATIONS */
+.inEditMode .entity, .inEditMode a[typeof][about] {
+	  border-bottom: 1px #729fcf dotted;
+}
+.inEditMode .entity.withSuggestions {
+    border-color: #73d216;
+    border-bottom-style: double;
+}
+
+.inEditMode .entity.person, .inEditMode a[typeof][about].person {
+    border-color: #e9b96e;
+}
+
+.inEditMode .entity.place, .inEditMode a[typeof][about].place {
+    border-color: #c17d11;
+}
+
+.inEditMode .entity.organisation, .inEditMode a[typeof][about].organisation {
+    border-color: #8f5902;
+}
+
+footer {
+    margin-top: 1.5em;
+    display: block;
+    background-color: #eeeeec;
+    bottom: 0px;
+}
+
+footer p {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+    font-size: 16pt;
+    line-height: 21pt;
+}

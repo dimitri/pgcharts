@@ -6,11 +6,13 @@
        (:GET  "/"                 'front-list-queries)
 
        ;; Resources
-       (:GET  "/js/.*"            'serve-resource)
-       (:GET  "/dist/.*"          'serve-resource)
-       (:GET  "/highcharts/.*"    'serve-resource)
-       (:GET  "/images/.*"        'serve-resource)
-       (:GET  "/cm/.*"            'serve-resource)
+       (:GET  "/js/.*"            'serve-resource) ; Our own javascript glue
+       (:GET  "/dist/.*"          'serve-resource) ; Bootstrap
+       (:GET  "/highcharts/.*"    'serve-resource) ; HighCharts
+       (:GET  "/images/.*"        'serve-resource) ; Static images
+       (:GET  "/cm/.*"            'serve-resource) ; CodeMirror
+       (:GET  "/hallo/.*"         'serve-resource) ; Hallo.js
+       (:GET  "/fa/.*"            'serve-resource) ; FontAwesome
 
        ;; Server status and control
        (:GET  "/status"    'front-server-status)
@@ -36,7 +38,9 @@
 
        ;; Search
        (:GET "/s"          'front-search-queries)
-       ))
+
+       ;; Document editing, trying hallo.js for an SQL Notebook
+       (:GET "/nb"         'front-new-notebook)))
 
 (defvar *acceptor* nil "The Web Server")
 (defvar *server-is-running* nil)

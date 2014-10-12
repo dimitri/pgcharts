@@ -36,6 +36,12 @@
 (defparameter *d3js*
   (asdf:system-relative-pathname :pgcharts "web/d3js/d3.min.js"))
 
+(defparameter *hallo-root*
+  (asdf:system-relative-pathname :pgcharts "web/hallo"))
+
+(defparameter *fontawesome-root*
+  (asdf:system-relative-pathname :pgcharts "web/font-awesome-4.2.0"))
+
 (defparameter *header-path*
   (asdf:system-relative-pathname :pgcharts "web/header.html"))
 
