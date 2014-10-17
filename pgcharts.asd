@@ -49,6 +49,7 @@
                (:file "front-db"    :depends-on ("package" "utils" "front-tools"))
                (:file "front-main"  :depends-on ("package" "utils" "front-tools"))
                (:file "front-query" :depends-on ("package" "utils" "front-tools"))
+               (:file "front-notebook" :depends-on ("package" "utils" "front-tools"))
 
                (:file "front-raw-query" :depends-on ("package"
                                                      "utils"
@@ -61,7 +62,8 @@
                                               "front-tools"
                                               "front-main"
                                               "front-db"
-                                              "front-query"))
+                                              "front-query"
+                                              "front-notebook"))
 
                ;; main entry point for the binary (command line)
                (:file "pgcharts" :depends-on ("package" "utils"))))))
