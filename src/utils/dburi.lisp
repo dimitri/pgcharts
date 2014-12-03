@@ -13,10 +13,9 @@
 (defrule punct (or #\, #\- #\_)
   (:text t))
 
-(defrule namestring (and (alpha-char-p character)
-			 (* (or (alpha-char-p character)
-				(digit-char-p character)
-				punct)))
+(defrule namestring (* (or (alpha-char-p character)
+                           (digit-char-p character)
+                           punct))
   (:text t))
 
 (defrule dsn-port (and ":" (* (digit-char-p character)))
