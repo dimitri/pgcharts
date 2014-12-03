@@ -130,7 +130,7 @@
             (or (when host
                   (destructuring-bind (type &optional name) host
                     (ecase type
-                      (:unix  (if name (cons :unix name) :unix))
+                      (:unix  (or name :unix))
                       (:ipv4  name)
                       (:host  name))))
                 (getenv-default "PGHOST"
