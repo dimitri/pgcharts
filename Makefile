@@ -47,7 +47,7 @@ DEBUILD_ROOT = /tmp/pgcharts
 all: $(PGCHARTS)
 
 docs:
-	ronn -roff pginstall.1.md
+	ronn -roff pgcharts.1.md
 
 clean:
 	rm -rf $(LIBS) $(QUICKLISP) $(QLDIR) $(MANIFEST) $(BUILDAPP) $(PGCHARTS)

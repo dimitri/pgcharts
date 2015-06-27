@@ -69,10 +69,6 @@ when they want to ease the maintenance and setup of the building.
     Print the registered pid of the server process. This information might
     be stale in case of unexpected termination of the server.
 
-  - `server reload`
-    
-    Forces the server to reload its configuration file.
-    
   - `setup <dburi>`
     
     Connects to the PostgreSQL database specified with the *dburi* parameter
