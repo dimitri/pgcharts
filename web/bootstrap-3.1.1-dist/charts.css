@@ -30,3 +30,11 @@
 hidden {
     display: none;
 }
+
+h3.error, h4.error {
+    color: red;
+}
+
+.error {
+    text-align: left;
+}

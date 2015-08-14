@@ -189,15 +189,27 @@
   "Given an SQL query and a connection string given as POST parameters,
    return the query result-set as CSV data."
   (setf (hunchentoot:content-type*) "text/plain")
-  (let* ((dname  (hunchentoot:post-parameter "dburi"))
+  (let* ((dbname (hunchentoot:post-parameter "dbname"))
          (query  (hunchentoot:post-parameter "query"))
-         (qdburi  (with-pgsql-connection (*dburi*)
-                    (db-uri (get-dao 'db dbname))))
-         (data   (with-pgsql-connection (qdburi)
-                   (query query))))
-    (with-output-to-string (s)
-     (loop :for row :in data
-        :do (format s "~&~{\"~a\"~^,~}" row)))))
+         (qdburi (with-pgsql-connection (*dburi*)
+                   (db-uri (get-dao 'db dbname)))))
+    (handler-case
+        (let ((data (with-pgsql-connection (qdburi) (query query))))
+          (with-output-to-string (s)
+            (loop :for row :in data
+               :do (format s "~&~{\"~a\"~^,~}" row))))
+      (database-error (e)
+        (hunchentoot:log-message* :error "condition: ~a" e)
+        (with-output-to-string (s)
+          (yason:encode-alist `((:sqlstate . ,(database-error-code e))
+                                (:message  . ,(database-error-message e))
+                                (:detail   . ,(database-error-detail e))
+                                (:hint     . ,(database-error-hint e))
+                                (:context  . ,(database-error-context e))
+                                (:query    . ,(database-error-query e))
+                                (:position . ,(database-error-position e))
+                                (:cause    . ,(database-error-cause e)))
+                              s))))))
 
 (defun front-fetch-json-data ()
   "Given an SQL query and a connection string given as POST parameters,
@@ -206,13 +218,26 @@
   (let* ((dbname  (hunchentoot:post-parameter "dbname"))
          (query   (hunchentoot:post-parameter "query"))
          (qdburi  (with-pgsql-connection (*dburi*)
-                    (db-uri (get-dao 'db dbname))))
-         (data    (with-pgsql-connection (qdburi)
-                    (query query :alists))))
-    (format nil "[~{~a~^, ~}]"
-            (loop :for row :in data
-               :collect (with-output-to-string (s)
-                          (yason:encode-alist row s))))))
+                    (db-uri (get-dao 'db dbname)))))
+    (handler-case
+        (let ((data (with-pgsql-connection (qdburi) (query query :alists))))
+          (hunchentoot:log-message* :error "data: ~a" data)
+          (format nil "[~{~a~^, ~}]"
+                  (loop :for row :in data
+                     :collect (with-output-to-string (s)
+                                (yason:encode-alist row s)))))
+      (database-error (e)
+        (hunchentoot:log-message* :error "condition: ~a" e)
+        (with-output-to-string (s)
+          (yason:encode-alist `((:sqlstate . ,(database-error-code e))
+                                (:message  . ,(database-error-message e))
+                                (:detail   . ,(database-error-detail e))
+                                (:hint     . ,(database-error-hint e))
+                                (:context  . ,(database-error-context e))
+                                (:query    . ,(database-error-query e))
+                                (:position . ,(database-error-position e))
+                                (:cause    . ,(database-error-cause e)))
+                              s))))))
 
 (defun front-save-query ()
   "Save SQL query as given by form."

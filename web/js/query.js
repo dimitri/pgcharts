@@ -76,28 +76,62 @@ function display_result()
 
     posting.done(function (data) {
         qdata = data;
-        qdesc = $("#qdesc").val();
-        qcats = $("#cats").val().toUpperCase();
-        qseries = $("#series").val().toUpperCase();
-        xtitle = $("#xtitle").val();
-        ytitle = $("#ytitle").val();
-        type = $("#chart-type option:selected").val().toLowerCase();
 
-        if (type)
+        if ($.isArray(qdata))
         {
-            $("#"+type).tab("show");
-            $("#qresult").empty();
-            switch(type)
+            qdesc = $("#qdesc").val();
+            qcats = $("#cats").val().toUpperCase();
+            qseries = $("#series").val().toUpperCase();
+            xtitle = $("#xtitle").val();
+            ytitle = $("#ytitle").val();
+            type = $("#chart-type option:selected").val().toLowerCase();
+
+            if (type)
             {
-                case "column":  col(data); break;
-                case "bar":     bar(data); break;
-                case "pie":     pie(data); break;
-                case "donut": donut(data); break;
+                $("#"+type).tab("show");
+                $("#qresult").empty();
+                switch(type)
+                {
+                    case "raw":     drawTable(data); break;
+                    case "column":  col(data); break;
+                    case "bar":     bar(data); break;
+                    case "pie":     pie(data); break;
+                    case "donut": donut(data); break;
+                }
+            }
+            else
+            {
+                drawTable(data);
             }
         }
         else
         {
-            drawTable(data);
+            // Error
+            $('label[for="query"]').append('<h3 class="error">Error:</h3>'
+                                           + '<span class="error">'
+                                           + qdata["MESSAGE"]
+                                           + '</span>');
+            if( qdata["DETAIL"] )
+            {
+                $('label[for="query"]').append('<h4 class="error">Detail:</h4>'
+                                               + '<span class="error">'
+                                               + qdata["DETAIL"]
+                                               + '</span>');
+            }
+            if( qdata["HINT"] )
+            {
+                $('label[for="query"]').append('<h4 class="error">Hint:</h4>'
+                                               + '<span class="error">'
+                                               + qdata["HINT"]
+                                               + '</span>');
+            }
+            if( qdata["CONTEXT"] )
+            {
+                $('label[for="query"]').append('<h4 class="error">Context:</h4>'
+                                               + '<span class="error">'
+                                               + qdata["CONTEXT"]
+                                               + '</span>');
+            }
         }
     });
 }
@@ -105,6 +139,8 @@ function display_result()
 $("#btn-run-query").click(function(event) {
     // alert( "Handler for .submit() called." );
     event.preventDefault();
+    // reset error message area
+    $('label[for="query"]').empty().append("Query SQL");
     display_result();
 });
 

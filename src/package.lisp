@@ -23,6 +23,16 @@
                 #:read-file-into-byte-vector)
   (:import-from #:split-sequence
                 #:split-sequence)
+  (:import-from #:cl-postgres
+                #:database-error
+                #:database-error-code
+                #:database-error-message
+                #:database-error-detail
+                #:database-error-hint
+                #:database-error-context
+                #:database-error-query
+                #:database-error-position
+                #:database-error-cause)
   (:export #:*acceptor*
            #:*server-is-running*
            #:start-server
