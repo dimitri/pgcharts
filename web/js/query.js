@@ -8,6 +8,15 @@ var ytitle;
 var type;
 
 //
+// See http://stackoverflow.com/questions/500336/how-to-scroll-to-an-element-in-jquery
+//
+jQuery.fn.extend({
+scrollToMe: function () {
+    var x = jQuery(this).offset().top - 100;
+    jQuery('html,body').animate({scrollTop: x}, 500);
+}});
+
+//
 // TABLE
 //
 
@@ -98,6 +107,7 @@ function display_result()
                     case "pie":     pie(data); break;
                     case "donut": donut(data); break;
                 }
+                $("#qresult").scrollToMe();
             }
             else
             {
