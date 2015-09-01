@@ -57,17 +57,21 @@
 ;;;
 (defun expand-user-homedir-pathname (namestring)
   "Expand NAMESTRING replacing leading ~ with (user-homedir-pathname)"
-  (cond ((or (string= "~" namestring) (string= "~/" namestring))
-         (user-homedir-pathname))
+  (typecase namestring
+    (pathname namestring)
+    (string
+     (cond ((or (string= "~" namestring) (string= "~/" namestring))
+            (user-homedir-pathname))
 
-        ((and (<= 2 (length namestring))
-              (char= #\~ (aref namestring 0))
-              (char= #\/ (aref namestring 1)))
-         (uiop:merge-pathnames* (uiop:parse-unix-namestring (subseq namestring 2))
-                                (user-homedir-pathname)))
+           ((and (<= 2 (length namestring))
+                 (char= #\~ (aref namestring 0))
+                 (char= #\/ (aref namestring 1)))
+            (uiop:merge-pathnames*
+             (uiop:parse-unix-namestring (subseq namestring 2))
+             (user-homedir-pathname)))
 
-        (t
-         (uiop:parse-unix-namestring namestring))))
+           (t
+            (uiop:parse-unix-namestring namestring))))))
 
 (defun set-config-filename (namestring)
   (setf *config-filename* (expand-user-homedir-pathname namestring)))
