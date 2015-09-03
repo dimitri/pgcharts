@@ -1,1 +1,2 @@
+debian/pgcharts.ini /etc
 build/bin/pgcharts /usr/bin

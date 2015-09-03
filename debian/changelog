@@ -1,3 +1,9 @@
+pgcharts (1.0-2) unstable; urgency=medium
+
+  * Improve packaging with a system pgcharts user
+
+ -- Dimitri Fontaine <dim@tapoueh.org>  Thu, 03 Sep 2015 16:28:44 +0300
+
 pgcharts (1.0-1) unstable; urgency=medium
 
   * First release.

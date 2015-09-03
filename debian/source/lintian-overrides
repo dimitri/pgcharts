@@ -1,0 +1,64 @@
+#
+# sbcl (common lisp compiler) isn't compatible with hardening of binary images
+#
+hardening-no-relro usr/bin/pgcharts
+#
+# the pgcharts sources embed javascript dependencies because of the way the
+# /usr/bin/pgcharts is built: all those static resources are then part of
+# the binary, and all you need to run the self-contained pgcharts web-server
+# is the binary itself.
+#
+source-is-missing web/hallo/rangy-core-1.2.3.js
+source-is-missing web/hallo/jquery-ui-1.10.2.min.js
+source-is-missing web/codemirror-4.5/codemirror-compressed.js
+source-is-missing web/highcharts/js/highcharts.js
+source-is-missing web/highcharts/js/highcharts-more.js
+source-is-missing web/highcharts/js/highcharts-all.js
+source-is-missing web/highcharts/js/highcharts-3d.js
+source-is-missing web/bootstrap-3.1.1-dist/js/jquery-1.11.0.min.js
+source-is-missing web/bootstrap-3.1.1-dist/js/docs.min.js
+source-is-missing web/highcharts/js/modules/solid-gauge.js
+source-is-missing web/highcharts/js/modules/no-data-to-display.js
+source-is-missing web/highcharts/js/modules/heatmap.js
+source-is-missing web/highcharts/js/modules/funnel.js
+source-is-missing web/highcharts/js/modules/exporting.js
+source-is-missing web/highcharts/js/modules/drilldown.js
+source-is-missing web/highcharts/js/modules/data.js
+source-is-missing web/highcharts/js/modules/canvas-tools.js
+source-is-missing web/highcharts/js/adapters/standalone-framework.js
+source-is-missing web/highcharts/exporting-server/phantomjs/solid-gauge.js
+source-is-missing web/highcharts/exporting-server/phantomjs/no-data-to-display.js
+source-is-missing web/highcharts/exporting-server/phantomjs/map.js
+source-is-missing web/highcharts/exporting-server/phantomjs/jquery.1.9.1.min.js
+source-is-missing web/highcharts/exporting-server/phantomjs/highcharts.js
+source-is-missing web/highcharts/exporting-server/phantomjs/highcharts-more.js
+source-is-missing web/highcharts/exporting-server/phantomjs/highcharts-3d.js
+source-is-missing web/highcharts/exporting-server/phantomjs/heatmap.js
+source-is-missing web/highcharts/exporting-server/phantomjs/funnel.js
+source-is-missing web/highcharts/exporting-server/phantomjs/drilldown.js
+source-is-missing web/highcharts/exporting-server/phantomjs/data.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/solid-gauge.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/no-data-to-display.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/map.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/jquery.1.9.1.min.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/highstock.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/highcharts.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/highcharts-more.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/highcharts-3d.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/heatmap.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/funnel.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/drilldown.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/classes/phantomjs/data.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-web/target/highcharts-export-web/resources/lib/jquery-1.11.0.min.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/resources/phantomjs/solid-gauge.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/resources/phantomjs/no-data-to-display.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/resources/phantomjs/map.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/resources/phantomjs/jquery.1.9.1.min.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/resources/phantomjs/highcharts.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/resources/phantomjs/highcharts-more.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/resources/phantomjs/highcharts-3d.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/resources/phantomjs/heatmap.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/resources/phantomjs/funnel.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/resources/phantomjs/drilldown.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/resources/phantomjs/data.js
+source-is-missing web/highcharts/exporting-server/java/highcharts-export/highcharts-export-web/src/main/webapp/resources/lib/jquery-1.11.0.min.js
