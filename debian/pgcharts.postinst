@@ -4,7 +4,7 @@ set -e
 
 if [ "$1" = configure ]; then
     # Make sure the administrative user exists
-    if ! getent passwd pginstall > /dev/null; then
+    if ! getent passwd pgcharts > /dev/null; then
         adduser --system --no-create-home --home /var/log/pgcharts \
                 --shell /bin/bash --group --gecos "pgcharts" pgcharts
     fi
@@ -13,7 +13,7 @@ if [ "$1" = configure ]; then
     install -d -g pgcharts -m 1775 /var/log/pgcharts /var/run/pgcharts
 
     # allow the pgcharts user to edit the setup using pgcharts commands
-    chmown root:pgcharts /etc/pgcharts.ini
+    chown root:pgcharts /etc/pgcharts.ini
 fi
 
 #DEBHELPER#
