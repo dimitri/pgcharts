@@ -1,10 +1,9 @@
 Source: pgcharts
 Priority: extra
 Maintainer: Dimitri Fontaine <dim@tapoueh.org>
-Uploaders: Christoph Berg <myon@debian.org>
 Build-Depends: debhelper (>= 9), sbcl (>= 1.2.0), buildapp (>= 1.5), cl-asdf (>= 3.0.3), cl-postmodern, cl-simple-date, cl-esrap, cl-py-configparser, cl-split-sequence, cl-ppcre, cl-alexandria, cl-hunchentoot, cl-yason, cl-closer-mop, cl-daemon, cl-who, cl-bordeaux-threads (>= 0.8.3), cl-curry-compose-reader-macros, cl-metabang-bind, cl-graph, cl-trivial-backtrace, cl-drakma, ruby-ronn
 Standards-Version: 3.9.6
-Section: database
+Section: non-free/database
 Homepage: https://github.com/dimitri/pgcharts
 Vcs-Git: https://github.com/dimitri/pgcharts.git
 Vcs-Browser: https://github.com/dimitri/pgcharts
