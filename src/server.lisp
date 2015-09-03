@@ -53,6 +53,7 @@
 
   (setf *acceptor* (make-instance 'simpleroutes-acceptor
                                   :routes '*routes*
+                                  :address *listen-address*
                                   :port *listen-port*
                                   :document-root nil
                                   :access-log-destination logs
