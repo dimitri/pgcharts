@@ -9,7 +9,6 @@ Vcs-Git: https://github.com/dimitri/pgcharts.git
 Vcs-Browser: https://github.com/dimitri/pgcharts
 
 Package: pgcharts
-Section: database
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, adduser
 Description: turn your PostgreSQL queries into charts

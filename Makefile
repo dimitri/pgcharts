@@ -114,7 +114,10 @@ pgcharts: $(PGCHARTS) ;
 deb:
 	# intended for use on a debian system
 	mkdir -p $(DEBUILD_ROOT) && rm -rf $(DEBUILD_ROOT)
-	rsync -Ca --exclude=build --exclude=.vagrant ./ $(DEBUILD_ROOT)/
+	rsync -Ca --exclude=build    \
+                  --exclude=.vagrant \
+                  --exclude=web/*zip \
+                  ./ $(DEBUILD_ROOT)/
 	cd $(DEBUILD_ROOT) && make -f debian/rules orig
 	cd $(DEBUILD_ROOT) && debuild -us -uc -sa
 	cp -a /tmp/pgcharts_* build/
