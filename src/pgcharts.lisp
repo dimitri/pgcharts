@@ -75,7 +75,7 @@
 (define-command (("setup") (&optional dburi))
     "setup the pgcharts database"
   (let ((*dburi*  (or dburi *dburi*)))
-    (write-config)
+    (save-config)
     (ensure-model-is-current)))
 
 (define-command (("status") ())
