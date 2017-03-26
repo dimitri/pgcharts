@@ -1,5 +1,5 @@
-web/bootstrap-3.1.1-dist/ linguist-vendored
-web/codemirror-4.5/       linguist-vendored
-web/font-awesome-4.2.0/   linguist-vendored
-web/hallo/                linguist-vendored
-web/highcharts/           linguist-vendored
+web/bootstrap-3.1.1-dist/**/* linguist-vendored
+web/codemirror-4.5/**/* linguist-vendored
+web/font-awesome-4.2.0/**/* linguist-vendored
+web/hallo/**/* linguist-vendored
+web/highcharts/**/* linguist-vendored
