@@ -126,8 +126,8 @@ able to compile pgcharts. It's easy to install on Linux, MacOSX and Windows.
 
 When using `debian stable` you might need to *backport* a recent enough
 version of the compiler, because stable contains a very old version of it as
-seen at [http://packages.debian.org/search?keywords=sbcl](). You will find
-my backport at [http://pgsql.tapoueh.org/sbcl/]() to get you started
+seen at [http://packages.debian.org/search?keywords=sbcl](http://packages.debian.org/search?keywords=sbcl). You will find
+my backport at [http://pgsql.tapoueh.org/sbcl/](http://pgsql.tapoueh.org/sbcl/) to get you started
 quickly, or apply the following recipe:
 
     $ <add sid as a deb-src source in /etc/apt/sources.list.d/*
