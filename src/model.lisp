@@ -167,3 +167,7 @@
 (defmethod yason:encode ((date simple-date:date)
                          &optional (stream *standard-output*))
   (format stream "\"~a\"" date))
+
+(defmethod yason:encode ((object (eql :null))
+                         &optional (stream *standard-output*))
+  (format stream "null"))
