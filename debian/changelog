@@ -1,3 +1,9 @@
+pgcharts (1.0-3) UNRELEASED; urgency=medium
+
+  * Run wrap-and-sort -st.
+
+ -- Christoph Berg <myon@debian.org>  Sun, 13 Jan 2019 12:59:09 +0100
+
 pgcharts (1.0-2) unstable; urgency=medium
 
   * Improve packaging with a system pgcharts user
