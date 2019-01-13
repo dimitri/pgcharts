@@ -1,6 +1,7 @@
 pgcharts (1.0-3) UNRELEASED; urgency=medium
 
   * Add B-D on cl-named-readtables. (Closes: #880090)
+  * Remove /var/log/pgcharts/ on purge. (Closes: #814653)
   * Run wrap-and-sort -st.
 
  -- Christoph Berg <myon@debian.org>  Sun, 13 Jan 2019 12:59:09 +0100
