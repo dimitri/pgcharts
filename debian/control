@@ -1,5 +1,5 @@
 Source: pgcharts
-Priority: extra
+Priority: optional
 Maintainer: Dimitri Fontaine <dim@tapoueh.org>
 Build-Depends:
  buildapp (>= 1.5),
