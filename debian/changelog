@@ -1,5 +1,6 @@
-pgcharts (1.0-3) UNRELEASED; urgency=medium
+pgcharts (1.0+2017-09-16-1) unstable; urgency=medium
 
+  * Team upload with new upstream snapshot.
   * Add B-D on cl-named-readtables. (Closes: #880090)
   * Remove /var/log/pgcharts/ on purge. (Closes: #814653)
   * Remove debian/home/ on clean.
