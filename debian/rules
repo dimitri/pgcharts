@@ -49,4 +49,4 @@ override_dh_strip:
 	# do nothing
 
 %:
-	dh $@ 
+	dh $@
