@@ -23,7 +23,7 @@ Build-Depends:
  cl-trivial-backtrace,
  cl-who,
  cl-yason,
- debhelper (>= 12~),
+ debhelper-compat (= 12),
  ruby-ronn,
  sbcl (>= 1.2.0),
 Standards-Version: 4.3.0
