@@ -26,7 +26,7 @@ Build-Depends:
  debhelper-compat (= 12),
  ruby-ronn,
  sbcl (>= 1.2.0),
-Standards-Version: 4.3.0
+Standards-Version: 4.4.1
 Section: non-free/database
 Homepage: https://github.com/dimitri/pgcharts
 Vcs-Git: https://github.com/dimitri/pgcharts.git
