@@ -18,6 +18,7 @@
         #:cl-who
         #:pgcharts.dburi
         #:pgcharts.sql)
+  (:shadowing-import-from #:postmodern #:read-queries)
   (:import-from #:alexandria
                 #:read-file-into-string
                 #:read-file-into-byte-vector)
