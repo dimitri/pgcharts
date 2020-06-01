@@ -19,10 +19,10 @@
   (:text t))
 
 (defrule dsn-port (and ":" (* (digit-char-p character)))
-  (:destructure (colon digits &aux (port (coerce digits 'string)))
+  (:destructure (colon digits)
 		(declare (ignore colon))
 		(list :port (if (null digits) digits
-				(parse-integer port)))))
+				(parse-integer (coerce digits 'string))))))
 
 (defrule doubled-at-sign (and "@@") (:constant "@"))
 (defrule doubled-colon   (and "::") (:constant ":"))
